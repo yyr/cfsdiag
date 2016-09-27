@@ -4,12 +4,18 @@
 begin
 
   var = "mslp"
+;  type = "X11"
+  type = "pdf"
 
   dir = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
   finname = "cfs2_ref_1m_2014_2064_" + var + ".nc"
 
+  foutname = "clim_mean.nc"
+
   f = addfile(dir + finname, "r")
-  print(getfilevarnames(f));
+  out = addfile(foutname, "c")
+
+;  print(getfilevarnames(f));
 
   mslp = f->mslp
   printVarSummary(mslp)
@@ -19,6 +25,21 @@ begin
 
   ; mlsp though starts in between the year and ..
   ; climslp = clmMonTLL(mslp(6:593,:,:))
+
   mslp_mean = dim_avg_n_Wrap(mslp,0)
+  wks = gsn_open_wks(type,var)
+  res = True
+  res@cnFillOn = True
+  res@trGridType = "TriangularMesh"
+
+  mslp_reverse = mslp_mean(::-1,:)
+
+  printVarSummary(mslp_mean)
+  printVarSummary(mslp_reverse)
+
+  plot = gsn_contour_map(wks, mslp_mean, res)
+
+  system("rm " + foutname)
+  out->clim_mslp = mslp_reverse
 
 end
