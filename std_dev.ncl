@@ -21,7 +21,8 @@ begin
   prate_ftpc = fs->$var$
 
   std_ref = stdMonTLL(prate_ref(6:593,0,:,:)) ; t dim has some odd beg end values
-  std_ftpc = stdMonTLL(prate_ftpc(3:14,0,:,:)) ; t dim has some odd beg end values
+  std_ftpc = stdMonTLL(prate_ftpc(3:26,0,:,:)) ; t dim has some odd beg end values
+
 
   if ( masking ) then
     lmfh = addfile("true_landmask.nc","r")
@@ -30,22 +31,25 @@ begin
       std_ref(it,:,:) = where(lm.eq.1, lm@_FillValue,std_ref(it,:,:))
       std_ftpc(it,:,:) = where(lm.eq.1, lm@_FillValue,std_ftpc(it,:,:))
     end do
+    std_ref@_FillValue = lm@_FillValue
+    std_ftpc@_FillValue = lm@_FillValue
   end if
 
-  std_ref@_FillValue = lm@_FillValue
-  std_ftpc@_FillValue = lm@_FillValue
 
-  fout_refname = var + "ref_std.nc"
+  printMinMax(std_ref,True)
+  printMinMax(std_ftpc,True)
+
+
+  fout_refname = var + "_ref_std.nc"
   system("rm " + fout_refname)
   anout =  addfile(fout_refname, "c")
   output_var = var + "_std"
+  anout->$output_var$ = std_ref
 
-  anout->$output_var$ = std_ftpc
-
-  fout_ftpcname = var + "ftpc_std.nc"
+  fout_ftpcname = var + "_ftpc_std.nc"
   system("rm " + fout_ftpcname)
   anout =  addfile(fout_ftpcname, "c")
   output_var = var + "_std"
-
   anout->$output_var$ = std_ftpc
+
 end
