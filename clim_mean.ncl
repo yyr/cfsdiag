@@ -13,6 +13,8 @@ begin
   foutname = "clim_mean.nc"
 
   f = addfile(dir + finname, "r")
+
+  system("rm " + foutname)
   out = addfile(foutname, "c")
 
 ;  print(getfilevarnames(f));
@@ -26,11 +28,11 @@ begin
   ; mlsp though starts in between the year and ..
   ; climslp = clmMonTLL(mslp(6:593,:,:))
 
-  mslp_mean = dim_avg_n_Wrap(mslp,0)
+  mslp_mean = dim_avg_n_Wrap(mslp(6:593,:,:),0)
   wks = gsn_open_wks(type,var)
   res = True
   res@cnFillOn = True
-  res@trGridType = "TriangularMesh"
+;  res@trGridType = "TriangularMesh"
 
   mslp_reverse = mslp_mean(::-1,:)
 
@@ -38,8 +40,6 @@ begin
   printVarSummary(mslp_reverse)
 
   plot = gsn_contour_map(wks, mslp_mean, res)
-
-  system("rm " + foutname)
   out->clim_mslp = mslp_reverse
 
 end
