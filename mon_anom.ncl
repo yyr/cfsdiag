@@ -2,7 +2,7 @@
 ; Created: Tuesday, September 27 2016
 
 begin
-  var = "prate"
+  var = "tsfc"
 ;  type = "X11"
   type = "pdf"
 
@@ -21,17 +21,31 @@ begin
   prate_ref = fr->$var$
   prate_ftpc = fs->$var$
 
-  clim_ref = clmMonTLL(prate_ref(6:593,:,:)) ; t dim has some odd beg end values
-  clim_ftpc = clmMonTLL(prate_ftpc(3:14,:,:)) ; t dim has some odd beg end values
+  clim_ref = clmMonTLL(prate_ref(6:593,0,:,:)) ; t dim has some odd beg end values
+  clim_ftpc = clmMonTLL(prate_ftpc(3:14,0,:,:)) ; t dim has some odd beg end values
 
-  printVarSummary(clim_ref)
-  printVarSummary(clim_ftpc)
 
   anom = clim_ref - clim_ftpc
   copy_VarCoords(clim_ref,anom)
-  printVarSummary(anom)
 
-  anout->mon_ano_prate = anom
+  ; printVarSummary(clim_ftpc)
+  ; printVarSummary(anom)
+
+  masking = True
+  if ( masking ) then
+    lmfh = addfile("true_landmask.nc","r")
+    lm = lmfh->LAND_GDS4_SFC_51
+    printVarSummary(lm)
+    do it = 0, 11, 1    ; doc
+      anom(it,:,:) = where(lm.eq.1, lm@_FillValue,anom(it,:,:))
+    end do
+    anom@_FillValue = lm@_FillValue
+  end if
+
+  output_var = "mon_ano_" + var
+  ; write out
+  anout->$output_var$ = anom
+;  anout->$output_var$ = anom
 
   res = True
   res@cnFillOn = True
