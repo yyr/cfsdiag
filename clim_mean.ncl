@@ -2,14 +2,32 @@
 ; Created: Monday, September 26 2016
 
 begin
-
   varname = "prate"
-;  type = "X11"
+; type = "X11"
   type = "pdf"
+  expmt = "ref"                 ; "ref", "ftpc"
 
-  dir = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
-  finname = "cfs2_ref_1m_2014_2064_" + varname + ".nc"
+  if ( expmt .eq. "ref" ) then
+    st = 66
+    et = 593
+    sy = 2020
+    ey = 2054
+  else
+    st = 3
+    et = 422
+    sy = 2020
+    ey = 2054
+  end if
 
+  dir = "~/git/cfsdiag/cfs/cfs2_" + expmt + "/orig/"
+
+  if ( expmt .eq. "ref" ) then
+    fbit = "_1m_2014_2064_"
+  else
+    fbit = "_1m_2019_2055_"
+  end if
+
+  finname = "cfs2_" + expmt + fbit + varname + ".nc"
   f = addfile(dir + finname, "r")
 
   var = f->$varname$
@@ -17,7 +35,7 @@ begin
 
   t = f->time
   t_l = cd_calendar(t,2)
-  var_mean = dim_avg_n_Wrap(var(6:593,:,:),0)
+  var_mean = dim_avg_n_Wrap(var(st:et,:,:),0)
 ;  printVarSummary(var_mean)
 
   wks = gsn_open_wks(type,varname)
@@ -28,10 +46,9 @@ begin
   plot = gsn_contour_map(wks, var_mean, res)
 
   ; output
-  foutname = "clim_" + varname + ".nc"
+  foutname = "clim_" + expmt + "_" + varname + "_" + sy + "_" + ey + ".nc"
   system("rm " + foutname)
   out = addfile(foutname, "c")
   outvarname = "clim_" + varname
   out->$outvarname$ = var
-
 end
