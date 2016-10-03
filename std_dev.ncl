@@ -2,28 +2,33 @@
 ; Created: Tuesday, September 27 2016
 
 begin
-  var = "tsfc"
-;  type = "X11"
-  type = "pdf"
-  masking = True
-
+  var = "prate"
 
   dircfc = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
   dirftpc = "~/git/cfsdiag/cfs/cfs2_ftpc/orig/"
   fincfc = "cfs2_ref_1m_2014_2064_" + var + ".nc"
   finftpc = "cfs2_ftpc_1m_2019_2055_" + var + ".nc"
 
+  stref = 66
+  etref = 593
+
+  stftpc = 3
+  etftpc = 422
+
+  sy = 2020
+  ey = 2054
+
   fr = addfile(dircfc + fincfc, "r")
   fs = addfile(dirftpc + finftpc, "r")
 
+  var_ref = fr->$var$
+  var_ftpc = fs->$var$
 
-  prate_ref = fr->$var$
-  prate_ftpc = fs->$var$
-
-  std_ref = stdMonTLL(prate_ref(6:593,0,:,:)) ; t dim has some odd beg end values
-  std_ftpc = stdMonTLL(prate_ftpc(3:26,0,:,:)) ; t dim has some odd beg end values
+  std_ref = stdMonTLL(var_ref(stref:etref,:,:))
+  std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,:,:))
 
 
+  masking = False
   if ( masking ) then
     lmfh = addfile("true_landmask.nc","r")
     lm = lmfh->LAND_GDS4_SFC_51
@@ -35,21 +40,15 @@ begin
     std_ftpc@_FillValue = lm@_FillValue
   end if
 
-
-  printMinMax(std_ref,True)
-  printMinMax(std_ftpc,True)
-
-
-  fout_refname = var + "_ref_std.nc"
-  system("rm " + fout_refname)
-  anout =  addfile(fout_refname, "c")
+  foutname = "std_ref_" + var + "_" + sy + "_" + ey + ".nc"
+  system("rm " + foutname)
+  anout =  addfile(foutname, "c")
   output_var = var + "_std"
   anout->$output_var$ = std_ref
 
-  fout_ftpcname = var + "_ftpc_std.nc"
+  fout_ftpcname = "std_ftpc_" + var + "_" + sy + "_" + ey + ".nc"
   system("rm " + fout_ftpcname)
   anout =  addfile(fout_ftpcname, "c")
   output_var = var + "_std"
   anout->$output_var$ = std_ftpc
-
 end
