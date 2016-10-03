@@ -3,21 +3,17 @@
 
 begin
   varname = "prate"
-; type = "X11"
-  type = "pdf"
   expmt = "ref"                 ; "ref", "ftpc"
 
   if ( expmt .eq. "ref" ) then
     st = 66
     et = 593
-    sy = 2020
-    ey = 2054
   else
     st = 3
     et = 422
-    sy = 2020
-    ey = 2054
   end if
+  sy = 2020
+  ey = 2054
 
   dir = "~/git/cfsdiag/cfs/cfs2_" + expmt + "/orig/"
 
@@ -38,17 +34,10 @@ begin
   var_mean = dim_avg_n_Wrap(var(st:et,:,:),0)
 ;  printVarSummary(var_mean)
 
-  wks = gsn_open_wks(type,varname)
-  res = True
-  res@cnFillOn = True
-
-;  var_reverse = var_mean(::-1,:)
-  plot = gsn_contour_map(wks, var_mean, res)
-
   ; output
   foutname = "clim_" + expmt + "_" + varname + "_" + sy + "_" + ey + ".nc"
   system("rm " + foutname)
   out = addfile(foutname, "c")
   outvarname = "clim_" + varname
-  out->$outvarname$ = var
+  out->$outvarname$ = var_mean
 end
