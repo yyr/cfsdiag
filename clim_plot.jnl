@@ -1,0 +1,18 @@
+cancel data/all
+can mode logo
+
+! set window/size=.45/aspect=1
+
+set view full
+set mode meta jan_cli.ps
+
+use "clim_ref_prate_2020_2054.nc"
+! show data/all
+fill/overlay/nolabel clim_prate
+go fland
+
+show view full
+
+can mode meta
+can region
+can data/all
