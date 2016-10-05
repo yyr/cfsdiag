@@ -43,15 +43,6 @@ begin
     var_mean = dim_avg_n_Wrap(var(st:et,:,:),0)
   end if
 
-;  printVarSummary(var_mean)
-
-  ; output
-  ; foutname = "clim_" + expmt + "_" + varname + "_" + sy + "_" + ey + ".nc"
-  ; system("rm " + foutname)
-  ; out = addfile(foutname, "c")
-  ; outvarname = "clim_" + varname
-  ; out->$outvarname$ = var_mean
-
   wks = gsn_open_wks(type,plotname)
 
   res = True
@@ -60,6 +51,7 @@ begin
   res = set_res_cn(res)
   res@cnLinesOn = False
 
+  ppname(plotname,type)
   if ( varname .eq. "prate" ) then
     set_res_cn_limits(res, TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
     else if ( varname .eq. "tsfc" ) then
