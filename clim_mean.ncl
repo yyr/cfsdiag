@@ -2,10 +2,11 @@
 ; Created: Monday, September 26 2016
 
 load "$nsc/resources.ncl"
+load "./config.ncl"
 
 begin
   type = "pdf"
-  varname = "prate"
+  varname = "tsfc"
   expmt = "ftpc"                 ; "ref", "ftpc"
   diag = "mean"
 
@@ -36,7 +37,12 @@ begin
   var = f->$varname$
 ;  printMinMax(var,True)
 
-  var_mean = dim_avg_n_Wrap(var(st:et,:,:),0)
+  if ( varname .eq. "tsfc" ) then
+    var_mean = dim_avg_n_Wrap(var(st:et,0,:,:),0)
+  else
+    var_mean = dim_avg_n_Wrap(var(st:et,:,:),0)
+  end if
+
 ;  printVarSummary(var_mean)
 
   ; output
@@ -47,13 +53,21 @@ begin
   ; out->$outvarname$ = var_mean
 
   wks = gsn_open_wks(type,plotname)
-  gsn_define_colormap(wks,"hotcold_18lev")
 
   res = True
   res = set_res_cn(res)
   res@gsnLeftString = expmt + "_" + varname  + "_" + diag
-  set_res_cn_limits(res,0,0.00026, 0.00002)
+  res = set_res_cn(res)
+  res@cnLinesOn = False
+
+  if ( varname .eq. "prate" ) then
+    set_res_cn_limits(res, TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
+    else if ( varname .eq. "tsfc" ) then
+      gsn_define_colormap(wks,TSFC@COLORMAP)
+    set_res_cn_limits(res,TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
+    else
+    end if
+  end if
 
   plot = gsn_csm_contour_map(wks, var_mean, res)
-
 end
