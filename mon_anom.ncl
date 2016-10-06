@@ -1,10 +1,20 @@
 ; Copyright (C) Yagnesh Raghava Yakkala. http://yagnesh.org
-; Created: Tuesday, September 27 2016
+; Created: Monday, September 26 2016
+
+load "$nsc/is.ncl"
+load "$nsc/resources.ncl"
+load "./config.ncl"
 
 begin
-  varname = "prate"
-;  type = "X11"
+  store_nc = False
+  ; varname = "tsfc"
+  varname_values = (/"tsfc", "prate"/)
   type = "pdf"
+  diag = "mon_anom"
+
+  if ( .not. isdefined("varname") ) then
+    varname = "tsfc"
+  end if
 
   stref = 66
   etref = 593
@@ -26,17 +36,21 @@ begin
   var_ref = fr->$varname$
   var_ftpc = fs->$varname$
 
-  clim_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
-  clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
+  if ( varname .eq. "tsfc" ) then
+    clim_ref = clmMonTLL(var_ref(stref:etref,0,:,:)) ; t dim has some odd beg end values
+    clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,0,:,:)) ; t dim has some odd beg end values
+    masking = True
+  end if
+  if ( varname .eq. "prate" ) then
+    clim_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
+    clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
+    masking = False
+  end if
 
   anom = clim_ref - clim_ftpc
+  printMinMax(anom,True)
   copy_VarCoords(clim_ref,anom)
 
-  foutname = "anom_" + varname + "_" + sy + "_" + ey + ".nc"
-  system("rm " + foutname)
-  anout =  addfile(foutname, "c")
-
-  masking = False
   if ( masking ) then
     lmfh = addfile("true_landmask.nc","r")
     lm = lmfh->LAND_GDS4_SFC_51
@@ -47,13 +61,36 @@ begin
     anom@_FillValue = lm@_FillValue
   end if
 
-
-  output_varname = "mon_ano_" + varname
-  anout->$output_varname$ = anom
-
   res = True
-  res@cnFillOn = True
+  res = set_res_cn(res)
+  res@gsnLeftString = diag + "_" + varname
+  res = set_res_cn(res)
+  res@cnLinesOn = False
 
-  wks = gsn_open_wks(type,varname + "_anom")
-  plot = gsn_contour_map(wks, anom(0,:,:), res)
+  plotname = diag + "_" + varname
+  wks = gsn_open_wks(type,plotname)
+  ppname(plotname,type)
+  if ( varname .eq. "prate" ) then
+      gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
+      set_res_cn_limits(res,ANOM_PRATE@CNMIN, ANOM_PRATE@CNMAX, ANOM_PRATE@CNINT)
+    else if ( varname .eq. "tsfc" ) then
+      gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
+      set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
+    else
+    end if
+  end if
+
+  do it = 0, 11, 1
+      plot = gsn_csm_contour_map(wks, anom(it,:,:), res)
+  end do
+
+
+  ; output
+  if ( store_nc ) then
+    foutname = "anom_" + varname + "_" + sy + "_" + ey + ".nc"
+    system("rm " + foutname)
+    anout =  addfile(foutname, "c")
+    output_varname = "mon_ano_" + varname
+    anout->$output_varname$ = anom
+  end if
 end
