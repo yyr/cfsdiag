@@ -37,13 +37,13 @@ begin
   var_ftpc = fs->$varname$
 
   if ( varname .eq. "tsfc" ) then
-    clim_ref = clmMonTLL(var_ref(stref:etref,0,:,:)) ; t dim has some odd beg end values
-    clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,0,:,:)) ; t dim has some odd beg end values
+    clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,0,:,:),0) ; t dim has some odd beg end values
+    clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,0,:,:),0) ; t dim has some odd beg end values
     masking = True
   end if
   if ( varname .eq. "prate" ) then
-    clim_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
-    clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
+    clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,:,:),0) ; t dim has some odd beg end values
+    clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,:,:),0) ; t dim has some odd beg end values
     masking = False
   end if
 
@@ -55,9 +55,7 @@ begin
     lmfh = addfile("true_landmask.nc","r")
     lm = lmfh->LAND_GDS4_SFC_51
     ; printVarSummary(lm)
-    do it = 0, 11, 1    ; doc
-      anom(it,:,:) = where(lm.eq.1, lm@_FillValue,anom(it,:,:))
-    end do
+    anom(:,:) = where(lm.eq.1, lm@_FillValue,anom(:,:))
     anom@_FillValue = lm@_FillValue
   end if
 
@@ -80,7 +78,7 @@ begin
     end if
   end if
 
-  plot = gsn_csm_contour_map(wks, anom(0,:,:), res)
+  plot = gsn_csm_contour_map(wks, anom, res)
 
   ; output
   if ( store_nc ) then
