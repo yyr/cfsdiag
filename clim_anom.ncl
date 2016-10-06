@@ -48,6 +48,7 @@ begin
   end if
 
   anom = clim_ref - clim_ftpc
+  printMinMax(anom,True)
   copy_VarCoords(clim_ref,anom)
 
   if ( masking ) then
@@ -70,10 +71,11 @@ begin
   wks = gsn_open_wks(type,plotname)
   ppname(plotname,type)
   if ( varname .eq. "prate" ) then
-    set_res_cn_limits(res, PRATE@CNMIN, PRATE@CNMAX, PRATE@CNINT)
+      gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
+      set_res_cn_limits(res,ANOM_PRATE@CNMIN, ANOM_PRATE@CNMAX, ANOM_PRATE@CNINT)
     else if ( varname .eq. "tsfc" ) then
-      gsn_define_colormap(wks,TSFC@COLORMAP)
-      set_res_cn_limits(res,TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
+      gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
+      set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
     else
     end if
   end if
