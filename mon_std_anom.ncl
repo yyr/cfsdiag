@@ -10,7 +10,7 @@ begin
   ; varname = "tsfc"
   varname_values = (/"tsfc", "prate"/)
   type = "pdf"
-  diag = "std_anom"
+  diag = "mon_std_anom"
 
   if ( .not. isdefined("varname") ) then
     varname = "tsfc"
