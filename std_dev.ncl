@@ -71,14 +71,19 @@ begin
   wks = gsn_open_wks(type,plotname)
   ppname(plotname,type)
   if ( varname .eq. "prate" ) then
-      gsn_define_colormap(wks,STD_ANOM_PRATE@COLORMAP)
-      set_res_cn_limits(res,STD_ANOM_PRATE@CNMIN, STD_ANOM_PRATE@CNMAX, STD_ANOM_PRATE@CNINT)
+    gsn_define_colormap(wks,STD_ANOM_PRATE@COLORMAP)
+    set_res_cn_limits(res,STD_ANOM_PRATE@CNMIN, STD_ANOM_PRATE@CNMAX, STD_ANOM_PRATE@CNINT)
     else if ( varname .eq. "tsfc" ) then
       gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
       set_res_cn_limits(res,STD_ANOM_TSFC@CNMIN, STD_ANOM_TSFC@CNMAX, STD_ANOM_TSFC@CNINT)
     else
     end if
   end if
+
+  ; make pacific center.
+  res@mpMinLonF=0
+  res@mpMaxLonF=360
+  res@mpCenterLonF=180
 
   do it = 0, 11, 1
     res@gsnCenterString = month_name(it)

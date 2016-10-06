@@ -71,20 +71,23 @@ begin
   wks = gsn_open_wks(type,plotname)
   ppname(plotname,type)
   if ( varname .eq. "prate" ) then
-      gsn_define_colormap(wks,ANOM_PRATE@COLORMAP)
-      set_res_cn_limits(res,ANOM_PRATE@CNMIN, ANOM_PRATE@CNMAX, ANOM_PRATE@CNINT)
+    gsn_define_colormap(wks,ANOM_PRATE@COLORMAP)
+    set_res_cn_limits(res,ANOM_PRATE@CNMIN, ANOM_PRATE@CNMAX, ANOM_PRATE@CNINT)
     else if ( varname .eq. "tsfc" ) then
       gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
       set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
-    else
     end if
   end if
+
+  ; make pacific center.
+  res@mpMinLonF=0
+  res@mpMaxLonF=360
+  res@mpCenterLonF=180
 
   do it = 0, 11, 1
     res@gsnCenterString = month_name(it)
     plot = gsn_csm_contour_map(wks, anom(it,:,:), res)
   end do
-
 
   ; output
   if ( store_nc ) then
