@@ -1,14 +1,24 @@
 ; Copyright (C) Yagnesh Raghava Yakkala. http://yagnesh.org
 ; Created: Monday, September 26 2016
 
+load "$nsc/is.ncl"
 load "$nsc/resources.ncl"
 load "./config.ncl"
 
 begin
   type = "pdf"
-  varname = "tsfc"
-  expmt = "ftpc"                 ; "ref", "ftpc"
+  ; varname = "tsfc"
+  ; expmt = "ftpc"                 ; "ref", "ftpc"
   diag = "mean"
+  varname_values = (/"tsfc", "prate"/)
+  expmt_values = (/"ftpc", "ref"/)
+
+  if ( .not. isdefined("varname") ) then
+    varname = "tsfc"
+  end if
+  if ( .not. isdefined("expmt") ) then
+    varname = "ftpc"
+  end if
 
 
   if ( expmt .eq. "ref" ) then
@@ -53,7 +63,7 @@ begin
 
   ppname(plotname,type)
   if ( varname .eq. "prate" ) then
-    set_res_cn_limits(res, TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
+    set_res_cn_limits(res, PRATE@CNMIN, PRATE@CNMAX, PRATE@CNINT)
     else if ( varname .eq. "tsfc" ) then
       gsn_define_colormap(wks,TSFC@COLORMAP)
     set_res_cn_limits(res,TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
