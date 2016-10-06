@@ -81,7 +81,8 @@ begin
   end if
 
   do it = 0, 11, 1
-      plot = gsn_csm_contour_map(wks, anom(it,:,:), res)
+    res@gsnCenterString = month_name(it)
+    plot = gsn_csm_contour_map(wks, anom(it,:,:), res)
   end do
 
   ; output
