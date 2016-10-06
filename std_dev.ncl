@@ -45,8 +45,8 @@ begin
     std_ref = stdMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
     std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
 
-    clim_ftpc = clim_ftpc * PRATE@UNITMULT
-    clim_ref = clim_ref * PRATE@UNITMULT
+    std_ftpc = std_ftpc * PRATE@UNITMULT
+    std_ref = std_ref * PRATE@UNITMULT
     masking = False
   end if
 
