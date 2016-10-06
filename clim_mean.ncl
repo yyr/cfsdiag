@@ -9,7 +9,7 @@ begin
   type = "pdf"
   ; varname = "tsfc"
   ; expmt = "ftpc"                 ; "ref", "ftpc"
-  diag = "mean"
+  diag = "clim_mean"
   varname_values = (/"tsfc", "prate"/)
   expmt_values = (/"ftpc", "ref"/)
 
@@ -31,7 +31,7 @@ begin
   sy = 2020
   ey = 2054
 
-  plotname = expmt + "_" + varname + "_" + diag
+  plotname = diag + "_" + expmt + "_" + varname
 
   dir = "~/git/cfsdiag/cfs/cfs2_" + expmt + "/orig/"
 
