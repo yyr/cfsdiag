@@ -13,6 +13,8 @@ begin
   varname_values = (/"tsfc", "prate"/)
   expmt_values = (/"ftpc", "ref"/)
 
+  store_nc = False
+
   if ( .not. isdefined("varname") ) then
     varname = "tsfc"
   end if
@@ -66,10 +68,19 @@ begin
     set_res_cn_limits(res, PRATE@CNMIN, PRATE@CNMAX, PRATE@CNINT)
     else if ( varname .eq. "tsfc" ) then
       gsn_define_colormap(wks,TSFC@COLORMAP)
-    set_res_cn_limits(res,TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
+      set_res_cn_limits(res,TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
     else
     end if
   end if
 
   plot = gsn_csm_contour_map(wks, var_mean, res)
+
+  ; output
+  if ( store_nc ) then
+    foutname = diag + "_" + expmt + "_" + varname + "_" + sy + "_" + ey + ".nc"
+    system("rm " + foutname)
+    out = addfile(foutname, "c")
+    outvarname = "clim_" + varname
+  end if
+
 end
