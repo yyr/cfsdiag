@@ -44,6 +44,9 @@ begin
   if ( varname .eq. "prate" ) then
     clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,:,:),0) ; t dim has some odd beg end values
     clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,:,:),0) ; t dim has some odd beg end values
+
+    clim_ftpc = clim_ftpc * PRATE@UNITMULT
+    clim_ref = clim_ref * PRATE@UNITMULT
     masking = False
   end if
 

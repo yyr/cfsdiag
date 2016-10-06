@@ -44,6 +44,9 @@ begin
   if ( varname .eq. "prate" ) then
     clim_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
     clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
+
+    clim_ftpc = clim_ftpc * PRATE@UNITMULT
+    clim_ref = clim_ref * PRATE@UNITMULT
     masking = False
   end if
 
