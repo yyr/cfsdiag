@@ -1,13 +1,20 @@
 ; Copyright (C) Yagnesh Raghava Yakkala. http://yagnesh.org
-; Created: Tuesday, September 27 2016
+; Created: Monday, September 26 2016
+
+load "$nsc/is.ncl"
+load "$nsc/resources.ncl"
+load "./config.ncl"
 
 begin
-  var = "prate"
+  store_nc = False
+  ; varname = "tsfc"
+  varname_values = (/"tsfc", "prate"/)
+  type = "pdf"
+  diag = "std_anom"
 
-  dircfc = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
-  dirftpc = "~/git/cfsdiag/cfs/cfs2_ftpc/orig/"
-  fincfc = "cfs2_ref_1m_2014_2064_" + var + ".nc"
-  finftpc = "cfs2_ftpc_1m_2019_2055_" + var + ".nc"
+  if ( .not. isdefined("varname") ) then
+    varname = "tsfc"
+  end if
 
   stref = 66
   etref = 593
@@ -18,37 +25,71 @@ begin
   sy = 2020
   ey = 2054
 
-  fr = addfile(dircfc + fincfc, "r")
+  dirrfc = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
+  dirftpc = "~/git/cfsdiag/cfs/cfs2_ftpc/orig/"
+  finrfc = "cfs2_ref_1m_2014_2064_" + varname + ".nc"
+  finftpc = "cfs2_ftpc_1m_2019_2055_" + varname + ".nc"
+
+  fr = addfile(dirrfc + finrfc, "r")
   fs = addfile(dirftpc + finftpc, "r")
 
-  var_ref = fr->$var$
-  var_ftpc = fs->$var$
+  var_ref = fr->$varname$
+  var_ftpc = fs->$varname$
 
-  std_ref = stdMonTLL(var_ref(stref:etref,:,:))
-  std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,:,:))
+  if ( varname .eq. "tsfc" ) then
+    std_ref = stdMonTLL(var_ref(stref:etref,0,:,:)) ; t dim has some odd beg end values
+    std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,0,:,:)) ; t dim has some odd beg end values
+    masking = True
+  end if
+  if ( varname .eq. "prate" ) then
+    std_ref = stdMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
+    std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
+    masking = False
+  end if
 
+  anom = std_ref - std_ftpc
+  printMinMax(anom,True)
+  copy_VarCoords(std_ref,anom)
 
-  masking = False
   if ( masking ) then
     lmfh = addfile("true_landmask.nc","r")
     lm = lmfh->LAND_GDS4_SFC_51
+    ; printVarSummary(lm)
     do it = 0, 11, 1    ; doc
-      std_ref(it,:,:) = where(lm.eq.1, lm@_FillValue,std_ref(it,:,:))
-      std_ftpc(it,:,:) = where(lm.eq.1, lm@_FillValue,std_ftpc(it,:,:))
+      anom(it,:,:) = where(lm.eq.1, lm@_FillValue,anom(it,:,:))
     end do
-    std_ref@_FillValue = lm@_FillValue
-    std_ftpc@_FillValue = lm@_FillValue
+    anom@_FillValue = lm@_FillValue
   end if
 
-  foutname = "std_ref_" + var + "_" + sy + "_" + ey + ".nc"
-  system("rm " + foutname)
-  anout =  addfile(foutname, "c")
-  output_var = var + "_std"
-  anout->$output_var$ = std_ref
+  res = True
+  res = set_res_cn(res)
+  res@gsnLeftString = diag + "_" + varname
+  res = set_res_cn(res)
+  res@cnLinesOn = False
 
-  fout_ftpcname = "std_ftpc_" + var + "_" + sy + "_" + ey + ".nc"
-  system("rm " + fout_ftpcname)
-  anout =  addfile(fout_ftpcname, "c")
-  output_var = var + "_std"
-  anout->$output_var$ = std_ftpc
+  plotname = diag + "_" + varname
+  wks = gsn_open_wks(type,plotname)
+  ppname(plotname,type)
+  if ( varname .eq. "prate" ) then
+      gsn_define_colormap(wks,STD_ANOM_PRATE@COLORMAP)
+      set_res_cn_limits(res,STD_ANOM_PRATE@CNMIN, STD_ANOM_PRATE@CNMAX, STD_ANOM_PRATE@CNINT)
+    else if ( varname .eq. "tsfc" ) then
+      gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
+      set_res_cn_limits(res,STD_ANOM_TSFC@CNMIN, STD_ANOM_TSFC@CNMAX, STD_ANOM_TSFC@CNINT)
+    else
+    end if
+  end if
+
+  do it = 0, 11, 1
+      plot = gsn_csm_contour_map(wks, anom(it,:,:), res)
+  end do
+
+  ; output
+  if ( store_nc ) then
+    foutname = "anom_" + varname + "_" + sy + "_" + ey + ".nc"
+    system("rm " + foutname)
+    anout =  addfile(foutname, "c")
+    output_varname = "mon_ano_" + varname
+    anout->$output_varname$ = anom
+  end if
 end
