@@ -74,11 +74,11 @@ begin
   wks = gsn_open_wks(type,plotname)
   ppname(plotname,type)
   if ( varname .eq. "prate" ) then
-    gsn_define_colormap(wks,STD_ANOM_PRATE@COLORMAP)
-    set_res_cn_limits(res,STD_ANOM_PRATE@CNMIN, STD_ANOM_PRATE@CNMAX, STD_ANOM_PRATE@CNINT)
+    gsn_define_colormap(wks,ANOM_PRATE@COLORMAP)
+    set_res_cn_limits(res,ANOM_PRATE@CNMIN, ANOM_PRATE@CNMAX, ANOM_PRATE@CNINT)
     else if ( varname .eq. "tsfc" ) then
       gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
-      set_res_cn_limits(res,STD_ANOM_TSFC@CNMIN, STD_ANOM_TSFC@CNMAX, STD_ANOM_TSFC@CNINT)
+      set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
     else
     end if
   end if
