@@ -38,12 +38,15 @@ begin
 
   if ( expmt .eq. "ref" ) then
     fbit = "_1m_2014_2064_"
-  else
-    fbit = "_1m_2020_2055_"
+    else if ( varname .eq. "ts" ) then
+      fbit = "_1m_2020_2055_"
+    else
+      fbit = "_1m_2019_2055_"
+    end if
   end if
 
   finname = "cfs2_" + expmt + fbit + varname + ".nc"
-  print(finname)
+
   f = addfile(dir + finname, "r")
 
   var = f->$varname$
@@ -68,14 +71,10 @@ begin
   ppname(plotname,type)
 
   if ( varname .eq. "prate" ) then
-    set_res_cn_limits(res, PRATE@CNMIN, PRATE@CNMAX, PRATE@CNINT)
-    else if ( varname .eq. "tsfc" ) then
-      gsn_define_colormap(wks,TSFC@COLORMAP)
-      set_res_cn_limits(res,TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
-      else if ( varname .eq. "ts" ) then
+    set_res_cn_limits(res, STD@CNMIN, STD@CNMAX, STD@CNINT)
+    else if ( varname .eq. "tsfc" .or. varname .eq. "ts" ) then
         gsn_define_colormap(wks,STD@COLORMAP)
         set_res_cn_limits(res,STD@CNMIN, STD@CNMAX, STD@CNINT)
-      end if
     end if
   end if
 
