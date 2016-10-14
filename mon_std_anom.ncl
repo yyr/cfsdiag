@@ -87,7 +87,10 @@ begin
     else if ( varname .eq. "tsfc" ) then
       gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
       set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
-    else
+      else if ( varname .eq. "ts" ) then
+        gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
+        set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
+      end if
     end if
   end if
 
