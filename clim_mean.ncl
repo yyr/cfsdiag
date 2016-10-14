@@ -9,7 +9,7 @@ begin
   type = "pdf"
   ; varname = "tsfc"
   ; expmt = "ftpc"                 ; "ref", "ftpc"
-  diag = "clim_mean"
+  diag = "mean"
   varname_values = (/"tsfc", "prate", "ts"/)
   expmt_values = (/"ftpc", "ref"/)
 
@@ -19,17 +19,22 @@ begin
     varname = "tsfc"
   end if
   if ( .not. isdefined("expmt") ) then
-    varname = "ftpc"
+    expmt = "ftpc"
   end if
 
 
   if ( expmt .eq. "ref" ) then
     st = 66
     et = 593
-  else
-    st = 3
-    et = 422
+    else if ( varname .eq. "ts" ) then
+      st = 0
+      et = 419
+    else
+      st = 3
+      et = 422
+    end if
   end if
+
   sy = 2020
   ey = 2054
 
@@ -39,8 +44,11 @@ begin
 
   if ( expmt .eq. "ref" ) then
     fbit = "_1m_2014_2064_"
-  else
-    fbit = "_1m_2019_2055_"
+    else if ( varname .eq. "ts" ) then
+      fbit = "_1m_2020_2055_"
+    else
+      fbit = "_1m_2019_2055_"
+    end if
   end if
 
   finname = "cfs2_" + expmt + fbit + varname + ".nc"
