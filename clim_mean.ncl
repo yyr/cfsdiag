@@ -10,7 +10,7 @@ begin
   ; varname = "tsfc"
   ; expmt = "ftpc"                 ; "ref", "ftpc"
   diag = "clim_mean"
-  varname_values = (/"tsfc", "prate"/)
+  varname_values = (/"tsfc", "prate", "ts"/)
   expmt_values = (/"ftpc", "ref"/)
 
   store_nc = False
@@ -69,7 +69,10 @@ begin
     else if ( varname .eq. "tsfc" ) then
       gsn_define_colormap(wks,TSFC@COLORMAP)
       set_res_cn_limits(res,TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
-    else
+      else if ( varname .eq. "ts" ) then
+        gsn_define_colormap(wks,TSFC@COLORMAP)
+        set_res_cn_limits(res,TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
+      end if
     end if
   end if
 
