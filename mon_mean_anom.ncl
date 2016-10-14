@@ -19,16 +19,28 @@ begin
   stref = 66
   etref = 593
 
-  stftpc = 3
-  etftpc = 422
+  if ( varname .eq. "ts" ) then
+    stftpc = 0
+    etftpc = 419
+  else
+    stftpc = 3
+    etftpc = 422
+  end if
 
   sy = 2020
   ey = 2054
 
+  if ( varname .eq. "ts" ) then
+    fbit = "_1m_2020_2055_"
+  else
+    fbit = "_1m_2019_2055_"
+  end if
+
+
   dirrfc = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
   dirftpc = "~/git/cfsdiag/cfs/cfs2_ftpc/orig/"
   finrfc = "cfs2_ref_1m_2014_2064_" + varname + ".nc"
-  finftpc = "cfs2_ftpc_1m_2019_2055_" + varname + ".nc"
+  finftpc = "cfs2_ftpc" + fbit + varname + ".nc"
 
   fr = addfile(dirrfc + finrfc, "r")
   fs = addfile(dirftpc + finftpc, "r")
@@ -41,6 +53,13 @@ begin
     clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,0,:,:)) ; t dim has some odd beg end values
     masking = True
   end if
+
+  if ( varname .eq. "ts" ) then
+    clim_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
+    clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
+    masking = False
+  end if
+
   if ( varname .eq. "prate" ) then
     clim_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
     clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
