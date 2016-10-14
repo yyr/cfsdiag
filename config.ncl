@@ -13,6 +13,12 @@ PRATE@CNMAX = 10.
 PRATE@CNINT = 0.5
 
 
+STD = True
+STD@COLORMAP = "WhBlGrYeRe"
+STD@CNMIN = 0
+STD@CNMAX = 20
+STD@CNINT = 1.
+
 ; anomaly
 ANOM_TSFC = True
 ANOM_TSFC@COLORMAP = "BlueRedGray"
