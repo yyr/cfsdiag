@@ -8,7 +8,7 @@ load "./config.ncl"
 begin
   store_nc = False
   ; varname = "tsfc"
-  varname_values = (/"tsfc", "prate"/)
+  varname_values = (/"tsfc", "prate", "ts"/)
   type = "pdf"
   diag = "clim_anom"
 
@@ -41,6 +41,14 @@ begin
     clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,0,:,:),0) ; t dim has some odd beg end values
     masking = True
   end if
+
+  if ( varname .eq. "ts" ) then
+    clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,:,:),0) ; t dim has some odd beg end values
+    clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,:,:),0) ; t dim has some odd beg end values
+    masking = False
+  end if
+
+
   if ( varname .eq. "prate" ) then
     clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,:,:),0) ; t dim has some odd beg end values
     clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,:,:),0) ; t dim has some odd beg end values
@@ -72,14 +80,22 @@ begin
   wks = gsn_open_wks(type,plotname)
   ppname(plotname,type)
   if ( varname .eq. "prate" ) then
-      gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
-      set_res_cn_limits(res,ANOM_PRATE@CNMIN, ANOM_PRATE@CNMAX, ANOM_PRATE@CNINT)
+    gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
+    set_res_cn_limits(res,ANOM_PRATE@CNMIN, ANOM_PRATE@CNMAX, ANOM_PRATE@CNINT)
     else if ( varname .eq. "tsfc" ) then
       gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
       set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
-    else
+      else if ( varname .eq. "ts" ) then
+        gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
+        set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
+      end if
     end if
   end if
+
+  ; make pacific center.
+  res@mpMinLonF=0
+  res@mpMaxLonF=360
+  res@mpCenterLonF=180
 
   plot = gsn_csm_contour_map(wks, anom, res)
 
