@@ -8,9 +8,9 @@ load "./config.ncl"
 begin
   store_nc = False
   ; varname = "tsfc"
-  varname_values = (/"tsfc", "prate"/)
+  varname_values = (/"tsfc", "prate", "ts"/)
   type = "pdf"
-  diag = "mon_mean_anom"
+  diag = "std_mon_anom"
 
   if ( .not. isdefined("varname") ) then
     varname = "tsfc"
@@ -36,7 +36,6 @@ begin
     fbit = "_1m_2019_2055_"
   end if
 
-
   dirrfc = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
   dirftpc = "~/git/cfsdiag/cfs/cfs2_ftpc/orig/"
   finrfc = "cfs2_ref_1m_2014_2064_" + varname + ".nc"
@@ -49,29 +48,36 @@ begin
   var_ftpc = fs->$varname$
 
   if ( varname .eq. "tsfc" ) then
-    clim_ref = clmMonTLL(var_ref(stref:etref,0,:,:)) ; t dim has some odd beg end values
-    clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,0,:,:)) ; t dim has some odd beg end values
+    std_ref = stdMonTLL(var_ref(stref:etref,0,:,:)) ; t dim has some odd beg end values
+    std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,0,:,:)) ; t dim has some odd beg end values
+    masking = True
+  end if
+
+  if ( varname .eq. "tsfc" ) then
+    std_ref = stdMonTLL(var_ref(stref:etref,0,:,:)) ; t dim has some odd beg end values
+    std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,0,:,:)) ; t dim has some odd beg end values
     masking = True
   end if
 
   if ( varname .eq. "ts" ) then
-    clim_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
-    clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
+    std_ref = stdMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
+    std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
     masking = False
   end if
+
 
   if ( varname .eq. "prate" ) then
-    clim_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
-    clim_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
+    std_ref = stdMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
+    std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
 
-    clim_ftpc = clim_ftpc * PRATE@UNITMULT
-    clim_ref = clim_ref * PRATE@UNITMULT
+    std_ftpc = std_ftpc * PRATE@UNITMULT
+    std_ref = std_ref * PRATE@UNITMULT
     masking = False
   end if
 
-  anom = clim_ref - clim_ftpc
+  anom = std_ref - std_ftpc
   printMinMax(anom,True)
-  copy_VarCoords(clim_ref,anom)
+  copy_VarCoords(std_ref,anom)
 
   if ( masking ) then
     lmfh = addfile("true_landmask.nc","r")
@@ -98,6 +104,10 @@ begin
     else if ( varname .eq. "tsfc" ) then
       gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
       set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
+      else if ( varname .eq. "ts" ) then
+        gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
+        set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
+      end if
     end if
   end if
 
