@@ -8,7 +8,7 @@ load "./config.ncl"
 begin
   store_nc = False
   ; varname = "tsfc"
-  varname_values = (/"tsfc", "prate"/)
+  varname_values = (/"tsfc", "prate", "ts"/)
   type = "pdf"
   diag = "mon_std_anom"
 
@@ -41,6 +41,14 @@ begin
     std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,0,:,:)) ; t dim has some odd beg end values
     masking = True
   end if
+
+  if ( varname .eq. "ts" ) then
+    std_ref = stdMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
+    std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
+    masking = False
+  end if
+
+
   if ( varname .eq. "prate" ) then
     std_ref = stdMonTLL(var_ref(stref:etref,:,:)) ; t dim has some odd beg end values
     std_ftpc = stdMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; t dim has some odd beg end values
