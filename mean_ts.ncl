@@ -82,19 +82,15 @@ begin
   ; printVarSummary(mn)
   ; printVarSummary(time)
 
+  res = True
+  res@gsnLeftString = diag + "_" + varname
+  res@xyLineColors      = (/"red", "blue"/)          ; change line color
 
-  resL = True
-  resL@xyLineColors      = "red"                    ; line color
-
-  resR = resL
-  resR@gsnLeftString = diag + "_" + varname
-  resR@xyLineColors      = "blue"                    ; line color
 
   plotname = diag + "_" + varname
   ppname(plotname,type)
   wks = gsn_open_wks(type,plotname)
 
-  plot = gsn_csm_xy2(wks, utc(::12,0), mr,\
-         mn, resL, resR)
-
+  plot = gsn_csm_xy(wks, utc(::12,0), (/mr,mn/), res)
+  ; maximize_output(wks,True)
 end
