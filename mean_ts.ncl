@@ -86,6 +86,15 @@ begin
   res@gsnLeftString = diag + "_" + varname
   res@xyLineColors      = (/"red", "blue"/)          ; change line color
 
+  res@pmLegendDisplayMode    = "Always"            ; turn on legend
+  res@pmLegendSide           = "Top"               ; Change location of
+  res@pmLegendParallelPosF   = .9                  ; move units right
+  res@pmLegendOrthogonalPosF = -0.2                ; move units down
+  res@pmLegendWidthF         = 0.05                ; Change width and
+  res@pmLegendHeightF        = 0.08                ; height of legend.
+  res@lgPerimOn              = False               ; turn off box around
+  res@lgLabelFontHeightF     = .02                 ; label font height
+  res@xyExplicitLegendLabels = (/" ref"," ftpc"/)         ; create explicit labels
 
   plotname = diag + "_" + varname
   ppname(plotname,type)
