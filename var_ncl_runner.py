@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+from itertools import product
 
 
 def parse():
@@ -15,16 +16,18 @@ def parse():
         else:
             newArg = (arg, '')
         args.append(newArg)
+        if counter + 1 == len(argv):
+            scr = argv[counter]
+
     return args
 
 
-def ncl_runner(args):
-    for item in args:
-        op, val = item
-        for v in val:
-            # ncl_runner
-            print("running " + op[1:] + "=" + v)
+def runner(args):
+    keys, value_list = zip(*args)
+    for item in product(*value_list):
+        v_list = ['{}={}'.format(key[1:], val) for key, val in zip(keys, item)]
+        print('prefix {} suffix'.format(' '.join(v_list)))
 
 
 if __name__ == '__main__':
-    ncl_runner(parse())
+    runner(parse())
