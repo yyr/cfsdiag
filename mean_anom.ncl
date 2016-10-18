@@ -17,7 +17,7 @@ begin
   end if
 
   stref = 66
-  etref = 593
+  etref = 485
 
   if ( varname .eq. "ts" ) then
     stftpc = 0
