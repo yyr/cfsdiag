@@ -9,7 +9,7 @@ begin
   ; varname = "tsfc"
   varname_values = (/"tsfc", "prate", "ts"/)
   type = "pdf"
-  diag = "mean_anom"
+  diag = "mean_yr"
 
   if ( .not. isdefined("varname") ) then
     varname = "tsfc"
@@ -78,9 +78,15 @@ begin
   plotname = diag + "_" + varname
   wks = gsn_open_wks(type,plotname)
 
-  res = True
+  resL = True
+  resL@xyLineColors      = "red"                    ; line color
+
+  resR = resL
+  resR@gsnLeftString = diag + "_" + varname
+  resR@xyLineColors      = "blue"                    ; line color
+
   plot = gsn_csm_xy2(wks, utc(stref:etref:12,0), month_to_annual(clim_ref,1),\
-         month_to_annual(clim_ftpc,1), res, res)
+         month_to_annual(clim_ftpc,1), resL, resR)
 
 
   ; res = True
