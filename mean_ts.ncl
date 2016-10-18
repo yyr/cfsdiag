@@ -46,8 +46,8 @@ begin
   var_ftpc = fs->$varname$
 
   if ( varname .eq. "tsfc" ) then
-    clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,0,:,:),0) ; t dim has some odd beg end values
-    clim_ftpc_ts = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,0,:,:),0) ; t dim has some odd beg end values
+    clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,0,:,:),(/1,2/)) ; t dim has some odd beg end values
+    clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,0,:,:),(/1,2/)) ; t dim has some odd beg end values
     masking = True
   end if
 
@@ -59,8 +59,8 @@ begin
 
 
   if ( varname .eq. "prate" ) then
-    clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,:,:),0) ; t dim has some odd beg end values
-    clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,:,:),0) ; t dim has some odd beg end values
+    clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,:,:),(/1,2/)) ; t dim has some odd beg end values
+    clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,:,:),(/1,2/)) ; t dim has some odd beg end values
 
     clim_ftpc = clim_ftpc * PRATE@UNITMULT
     clim_ref = clim_ref * PRATE@UNITMULT
@@ -68,12 +68,12 @@ begin
   end if
 
 
-  time = fr->time
-  printVarSummary(clim_ref)
-  printVarSummary(clim_ftpc)
-  printVarSummary(time(stref:etref))
-
+  time = fr->time(stref:etref)
   utc = cd_calendar(time,0)
+  ; printVarSummary(clim_ref)
+  ; printVarSummary(clim_ftpc)
+  ; printVarSummary(time)
+
 
   plotname = diag + "_" + varname
   wks = gsn_open_wks(type,plotname)
@@ -85,15 +85,7 @@ begin
   resR@gsnLeftString = diag + "_" + varname
   resR@xyLineColors      = "blue"                    ; line color
 
-  plot = gsn_csm_xy2(wks, utc(stref:etref:12,0), month_to_annual(clim_ref,1),\
+  plot = gsn_csm_xy2(wks, utc(:12,0), month_to_annual(clim_ref,1),\
          month_to_annual(clim_ftpc,1), resL, resR)
-
-
-  ; res = True
-  ; res@gsnLeftString = diag + "_" + varname
-
-  ; wks = gsn_open_wks(type,plotname)
-  ; ppname(plotname,type)
-  ; plot = gsn_csm_contour_map(wks, anom, res)
 
 end
