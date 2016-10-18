@@ -1,8 +1,9 @@
 ; Copyright (C) Yagnesh Raghava Yakkala. http://yagnesh.org
 ; Created: Friday, October 14 2016
 
-; load "$nsc/is.ncl"
-; load "$nsc/resources.ncl"
+load "$nsc/is.ncl"
+load "$nsc/resources.ncl"
+load "./config.ncl"
 
 begin
   store_nc = False
@@ -67,16 +68,20 @@ begin
     masking = False
   end if
 
+  if ( varname .ne. "prate" ) then
+    mr = month_to_annual(clim_ref,1) ; yearly mean.
+    mn = month_to_annual(clim_ftpc,1)
+  else
+    mr = month_to_annual(clim_ref,0) ; yearly mean.
+    mn = month_to_annual(clim_ftpc,0)
+  end if
 
   time = fr->time(stref:etref)
   utc = cd_calendar(time,0)
-  ; printVarSummary(clim_ref)
-  ; printVarSummary(clim_ftpc)
+  ; printVarSummary(mr)
+  ; printVarSummary(mn)
   ; printVarSummary(time)
 
-
-  plotname = diag + "_" + varname
-  wks = gsn_open_wks(type,plotname)
 
   resL = True
   resL@xyLineColors      = "red"                    ; line color
@@ -85,7 +90,11 @@ begin
   resR@gsnLeftString = diag + "_" + varname
   resR@xyLineColors      = "blue"                    ; line color
 
-  plot = gsn_csm_xy2(wks, utc(:12,0), month_to_annual(clim_ref,1),\
-         month_to_annual(clim_ftpc,1), resL, resR)
+  plotname = diag + "_" + varname
+  ppname(plotname,type)
+  wks = gsn_open_wks(type,plotname)
+
+  plot = gsn_csm_xy2(wks, utc(::12,0), mr,\
+         mn, resL, resR)
 
 end
