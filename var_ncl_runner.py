@@ -1,4 +1,17 @@
 #!/usr/bin/env python3
+"""
+Usage:
+var_ncl_runner.py -a '1 2' -b '1 2 3' myscript.ncl
+
+This will iterate and run as follows.
+
+ncl 'a="1"' 'b="1"'  myscript.ncl
+ncl 'a="1"' 'b="2"'  myscript.ncl
+ncl 'a="1"' 'b="3"'  myscript.ncl
+ncl 'a="2"' 'b="1"'  myscript.ncl
+ncl 'a="2"' 'b="2"'  myscript.ncl
+ncl 'a="2"' 'b="3"'  myscript.ncl
+"""
 
 import sys
 from itertools import product
@@ -23,6 +36,7 @@ def parse():
 def runner(opts, scr):
     keys, value_list = zip(*opts)
     for item in product(*value_list):
+        # FIXME: ncl may get choked if numbers are passed as strings
         v_list = ['\'{}="{}"\''.format(key[1:], val)
                   for key, val in zip(keys, item)]
         print('ncl {} '.format(' '.join(v_list)), scr)
