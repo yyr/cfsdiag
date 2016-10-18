@@ -9,25 +9,27 @@ def parse():
     argv = sys.argv
 
     for counter, arg in enumerate(argv):
-        if arg[:1] != '-':
+        if (counter == len(argv) - 1):
+            scr = argv[counter]
+        elif arg[:1] != '-':
             continue
         elif (counter < len(argv) - 1) and (argv[counter + 1][:1] != '-'):
             newArg = (arg, argv[counter + 1].split(" "))
         else:
             newArg = (arg, '')
         args.append(newArg)
-        if counter + 1 == len(argv):
-            scr = argv[counter]
 
-    return args
+    return args, scr
 
 
-def runner(args):
-    keys, value_list = zip(*args)
+def runner(opts, scr):
+    keys, value_list = zip(*opts)
     for item in product(*value_list):
-        v_list = ['{}={}'.format(key[1:], val) for key, val in zip(keys, item)]
-        print('prefix {} suffix'.format(' '.join(v_list)))
+        v_list = ['\'{}="{}"\''.format(key[1:], val)
+                  for key, val in zip(keys, item)]
+        print('ncl {} '.format(' '.join(v_list)), scr)
 
 
 if __name__ == '__main__':
-    runner(parse())
+    args, scr = parse()
+    runner(args, scr)
