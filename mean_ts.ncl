@@ -83,6 +83,7 @@ begin
   ; printVarSummary(time)
 
   res = True
+  res = set_res_no_frame(res)
   res@gsnLeftString = diag + "_" + varname
   res@xyLineColors      = (/"red", "blue"/)          ; change line color
 
@@ -94,5 +95,5 @@ begin
   wks = gsn_open_wks(type,plotname)
 
   plot = gsn_csm_xy(wks, utc(::12,0), (/mr,mn/), res)
-  ; maximize_output(wks,True)
+  maximize_output(wks,True)
 end
