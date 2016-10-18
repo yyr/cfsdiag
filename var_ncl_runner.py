@@ -9,9 +9,7 @@ def parse():
     argv = sys.argv
 
     for counter, arg in enumerate(argv):
-        if (counter == len(argv) - 1):
-            scr = argv[counter]
-        elif arg[:1] != '-':
+        if arg[:1] != '-':
             continue
         elif (counter < len(argv) - 1) and (argv[counter + 1][:1] != '-'):
             newArg = (arg, argv[counter + 1].split(" "))
@@ -19,7 +17,7 @@ def parse():
             newArg = (arg, '')
         args.append(newArg)
 
-    return args, scr
+    return args, argv[-1]
 
 
 def runner(opts, scr):
