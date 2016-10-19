@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Usage:
-var_ncl_runner.py -a '1 2' -b '1 2 3' myscript.ncl
+nclrunner.py -a '1 2' -b '1 2 3' myscript.ncl
 
 This will iterate and run as follows.
 
