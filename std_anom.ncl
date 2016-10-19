@@ -6,11 +6,10 @@ load "$nsc/resources.ncl"
 load "./config.ncl"
 
 begin
-  store_nc = False
-  ; varname = "tsfc"
   varname_values = (/"tsfc", "prate", "ts"/)
   type = "pdf"
   diag = "std_anom"
+  masking = False
 
   if ( .not. isdefined("varname") ) then
     varname = "tsfc"
@@ -48,25 +47,37 @@ begin
   var_ftpc = fs->$varname$
 
   if ( varname .eq. "tsfc" ) then
-    std_ref = dim_stddev_n_Wrap(var_ref(stref:etref,0,:,:),0) ; t dim has some odd beg end values
-    std_ftpc = dim_stddev_n_Wrap(var_ftpc(stftpc:etftpc,0,:,:),0) ; t dim has some odd beg end values
-    masking = True
+    clm_ref = clmMonTLL(var_ref(stref:etref,0,:,:)) ; monthly climatology
+    xAnom = calcMonAnomTLL(var_ref(stref:etref,0,:,:),clm_ref)
+    std_ref = dim_stddev_n_Wrap(xAnom,0)
+
+    clm_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,0,:,:)) ; monthly climatology
+    xAnom = calcMonAnomTLL(var_ftpc(stftpc:etftpc,0,:,:),clm_ftpc)
+    std_ftpc = dim_stddev_n_Wrap(xAnom,0)
   end if
 
   if ( varname .eq. "ts" ) then
-    std_ref = dim_stddev_n_Wrap(var_ref(stref:etref,:,:),0) ; t dim has some odd beg end values
-    std_ftpc = dim_stddev_n_Wrap(var_ftpc(stftpc:etftpc,:,:),0) ; t dim has some odd beg end values
-    masking = False
+    clm_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; monthly climatology
+    xAnom = calcMonAnomTLL(var_ref(stref:etref,:,:),clm_ref)
+    std_ref = dim_stddev_n_Wrap(xAnom,0)
+
+    clm_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; monthly climatology
+    xAnom = calcMonAnomTLL(var_ftpc(stftpc:etftpc,:,:),clm_ftpc)
+    std_ftpc = dim_stddev_n_Wrap(xAnom,0)
   end if
 
 
   if ( varname .eq. "prate" ) then
-    std_ref = dim_stddev_n_Wrap(var_ref(stref:etref,:,:),0) ; t dim has some odd beg end values
-    std_ftpc = dim_stddev_n_Wrap(var_ftpc(stftpc:etftpc,:,:),0) ; t dim has some odd beg end values
+    var_ref = var_ref * PRATE@UNITMULT
+    var_ftpc = var_ftpc * PRATE@UNITMULT
 
-    std_ftpc = std_ftpc * PRATE@UNITMULT
-    std_ref = std_ref * PRATE@UNITMULT
-    masking = False
+    clm_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; monthly climatology
+    xAnom = calcMonAnomTLL(var_ref(stref:etref,:,:),clm_ref)
+    std_ref = dim_stddev_n_Wrap(xAnom,0)
+
+    clm_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; monthly climatology
+    xAnom = calcMonAnomTLL(var_ftpc(stftpc:etftpc,:,:),clm_ftpc)
+    std_ftpc = dim_stddev_n_Wrap(xAnom,0)
   end if
 
   anom = std_ref - std_ftpc
@@ -109,13 +120,4 @@ begin
   res@mpCenterLonF=180
 
   plot = gsn_csm_contour_map(wks, anom, res)
-
-  ; output
-  if ( store_nc ) then
-    foutname = "anom_" + varname + "_" + sy + "_" + ey + ".nc"
-    system("rm " + foutname)
-    anout =  addfile(foutname, "c")
-    output_varname = "mon_ano_" + varname
-    anout->$output_varname$ = anom
-  end if
 end
