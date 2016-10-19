@@ -2,7 +2,7 @@ Ncl scripts to visualize CFSv2 Model output.
 
 Depends on ncl-lib_
 
-.. ncl-lib: github.com/yyr/ncl-lib
+.. _ncl-lib: github.com/yyr/ncl-lib
 
 
 License
