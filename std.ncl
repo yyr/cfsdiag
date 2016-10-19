@@ -51,23 +51,20 @@ begin
   ; printMinMax(var,True)
 
   if ( varname .eq. "tsfc" ) then
-    clm = clmMonTLL(var(st:et,0,:,:)) ; monthly climatology
-    xAnom = calcMonAnomTLL(var(st:et,0,:,:),clm)
-    var_std = dim_stddev_n_Wrap(xAnom,0)
+    var_std_mon = stdMonTLL(var(st:et,0,:,:)) ; to negate yearly cycle
+    var_std = dim_avg_n_Wrap(var_std_mon,0)
   end if
 
   if ( varname .eq. "ts" ) then
-    clm = clmMonTLL(var(st:et,:,:)) ; monthly climatology
-    xAnom = calcMonAnomTLL(var(st:et,:,:),clm)
-    var_std = dim_stddev_n_Wrap(xAnom,0)
+    var_std_mon = stdMonTLL(var(st:et,:,:)) ; to negate yearly cycle
+    var_std = dim_avg_n_Wrap(var_std_mon,0)
   end if
 
 
   if ( varname .eq. "prate" ) then
     var = var * PRATE@UNITMULT
-    clm = clmMonTLL(var(st:et,:,:)) ; monthly climatology
-    xAnom = calcMonAnomTLL(var(st:et,:,:),clm)
-    var_std = dim_stddev_n_Wrap(xAnom,0)
+    var_std_mon = stdMonTLL(var(st:et,:,:))
+    var_std = dim_avg_n_Wrap(var_std_mon,0)
   end if
 
   printMinMax(var_std,True)
