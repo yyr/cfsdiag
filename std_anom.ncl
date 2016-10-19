@@ -46,6 +46,8 @@ begin
   var_ref = fr->$varname$
   var_ftpc = fs->$varname$
 
+  ; NOTE: the calculation method tsfc and ts are varies
+  ; they yeild mostly same results though.
   if ( varname .eq. "tsfc" ) then
     clm_ref = clmMonTLL(var_ref(stref:etref,0,:,:)) ; monthly climatology
     xAnom = calcMonAnomTLL(var_ref(stref:etref,0,:,:),clm_ref)
@@ -57,27 +59,22 @@ begin
   end if
 
   if ( varname .eq. "ts" ) then
-    clm_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; monthly climatology
-    xAnom = calcMonAnomTLL(var_ref(stref:etref,:,:),clm_ref)
-    std_ref = dim_stddev_n_Wrap(xAnom,0)
+    std_ref_mon = stdMonTLL(var_ref(stref:etref,:,:))
+    std_ref = dim_avg_n_Wrap(std_ref_mon,0)
 
-    clm_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; monthly climatology
-    xAnom = calcMonAnomTLL(var_ftpc(stftpc:etftpc,:,:),clm_ftpc)
-    std_ftpc = dim_stddev_n_Wrap(xAnom,0)
+    std_ftpc_mon = stdMonTLL(var_ftpc(stftpc:etftpc,:,:))
+    std_ftpc = dim_avg_n_Wrap(std_ftpc_mon,0)
   end if
-
 
   if ( varname .eq. "prate" ) then
     var_ref = var_ref * PRATE@UNITMULT
     var_ftpc = var_ftpc * PRATE@UNITMULT
 
-    clm_ref = clmMonTLL(var_ref(stref:etref,:,:)) ; monthly climatology
-    xAnom = calcMonAnomTLL(var_ref(stref:etref,:,:),clm_ref)
-    std_ref = dim_stddev_n_Wrap(xAnom,0)
+    std_ref_mon = stdMonTLL(var_ref(stref:etref,:,:))
+    std_ref = dim_avg_n_Wrap(std_ref_mon,0)
 
-    clm_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,:,:)) ; monthly climatology
-    xAnom = calcMonAnomTLL(var_ftpc(stftpc:etftpc,:,:),clm_ftpc)
-    std_ftpc = dim_stddev_n_Wrap(xAnom,0)
+    std_ftpc_mon = stdMonTLL(var_ftpc(stftpc:etftpc,:,:))
+    std_ftpc = dim_avg_n_Wrap(std_ftpc_mon,0)
   end if
 
   anom = std_ref - std_ftpc
