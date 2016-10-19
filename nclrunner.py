@@ -33,15 +33,26 @@ def parse():
     return args, argv[-1]
 
 
-def runner(opts, scr):
+def prepare_command(opts, scr):
     keys, value_list = zip(*opts)
+    cmds = []
     for item in product(*value_list):
         # FIXME: ncl may get choked if numbers are passed as strings
         v_list = ['\'{}="{}"\''.format(key[1:], val)
                   for key, val in zip(keys, item)]
-        print('ncl {} '.format(' '.join(v_list)), scr)
+        cmds.append('ncl {} {scr}'.format(' '.join(v_list), scr=scr))
+
+    return cmds
+
+
+def run_command(coms):
+    print("\n running: {}".format(com))
+    import subprocess
+    subprocess.call(com, shell=True)
 
 
 if __name__ == '__main__':
     args, scr = parse()
-    runner(args, scr)
+    coms = prepare_command(args, scr)
+    for com in coms:
+        run_command(com)
