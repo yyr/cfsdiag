@@ -7,8 +7,6 @@ load "./config.ncl"
 
 begin
   type = "pdf"
-  ; varname = "tsfc"
-  ; expmt = "ftpc"                 ; "ref", "ftpc"
   diag = "mean_mon"
   varname_values = (/"tsfc", "prate", "ts"/)
   expmt_values = (/"ftpc", "ref"/)
@@ -55,9 +53,9 @@ begin
 ;  printMinMax(var,True)
 
   if ( varname .eq. "tsfc" ) then
-    var_mean = dim_avg_n_Wrap(var(st:et,0,:,:),0)
+    var_mean = clmMonTLL(var(st:et,0,:,:))
   else
-    var_mean = dim_avg_n_Wrap(var(st:et,:,:),0)
+    var_mean = clmMonTLL(var(st:et,:,:))
   end if
 
   wks = gsn_open_wks(type,plotname)
@@ -77,6 +75,14 @@ begin
     end if
   end if
 
-  plot = gsn_csm_contour_map(wks, var_mean, res)
+  ; make pacific center.
+  res@mpMinLonF=0
+  res@mpMaxLonF=360
+  res@mpCenterLonF=180
+
+  do it = 0, 11, 1
+    res@gsnCenterString = month_name(it)
+    plot = gsn_csm_contour_map(wks, var_mean(it,:,:), res)
+  end do
 
 end
