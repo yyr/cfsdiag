@@ -48,30 +48,30 @@ begin
   var_ftpc = fs->$varname$
 
   if ( varname .eq. "tsfc" ) then
-    clim_ref = dim_stddev_n_Wrap(var_ref(stref:etref,0,:,:),0) ; t dim has some odd beg end values
-    clim_ftpc = dim_stddev_n_Wrap(var_ftpc(stftpc:etftpc,0,:,:),0) ; t dim has some odd beg end values
+    std_ref = dim_stddev_n_Wrap(var_ref(stref:etref,0,:,:),0) ; t dim has some odd beg end values
+    std_ftpc = dim_stddev_n_Wrap(var_ftpc(stftpc:etftpc,0,:,:),0) ; t dim has some odd beg end values
     masking = True
   end if
 
   if ( varname .eq. "ts" ) then
-    clim_ref = dim_stddev_n_Wrap(var_ref(stref:etref,:,:),0) ; t dim has some odd beg end values
-    clim_ftpc = dim_stddev_n_Wrap(var_ftpc(stftpc:etftpc,:,:),0) ; t dim has some odd beg end values
+    std_ref = dim_stddev_n_Wrap(var_ref(stref:etref,:,:),0) ; t dim has some odd beg end values
+    std_ftpc = dim_stddev_n_Wrap(var_ftpc(stftpc:etftpc,:,:),0) ; t dim has some odd beg end values
     masking = False
   end if
 
 
   if ( varname .eq. "prate" ) then
-    clim_ref = dim_stddev_n_Wrap(var_ref(stref:etref,:,:),0) ; t dim has some odd beg end values
-    clim_ftpc = dim_stddev_n_Wrap(var_ftpc(stftpc:etftpc,:,:),0) ; t dim has some odd beg end values
+    std_ref = dim_stddev_n_Wrap(var_ref(stref:etref,:,:),0) ; t dim has some odd beg end values
+    std_ftpc = dim_stddev_n_Wrap(var_ftpc(stftpc:etftpc,:,:),0) ; t dim has some odd beg end values
 
-    clim_ftpc = clim_ftpc * PRATE@UNITMULT
-    clim_ref = clim_ref * PRATE@UNITMULT
+    std_ftpc = std_ftpc * PRATE@UNITMULT
+    std_ref = std_ref * PRATE@UNITMULT
     masking = False
   end if
 
-  anom = clim_ref - clim_ftpc
+  anom = std_ref - std_ftpc
   printMinMax(anom,True)
-  copy_VarCoords(clim_ref,anom)
+  copy_VarCoords(std_ref,anom)
 
   if ( masking ) then
     lmfh = addfile("true_landmask.nc","r")
