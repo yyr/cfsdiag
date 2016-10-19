@@ -53,7 +53,9 @@ begin
   ; printMinMax(var,True)
 
   if ( varname .eq. "tsfc" ) then
-    var_std = dim_stddev_n_Wrap(var(st:et,0,:,:),0)
+    clm = clmMonTLL(var(st:et,0,:,:)) ; monthly climatology
+    xAnom = calcMonAnomTLL(var(st:et,0,:,:),clm)
+    var_std = dim_stddev_n_Wrap(xAnom,0)
   else
     var_std = dim_stddev_n_Wrap(var(st:et,:,:),0)
   end if
