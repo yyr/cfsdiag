@@ -46,7 +46,7 @@ def prepare_command(opts, scr):
 
 
 def run_command(coms):
-    print("\n running: {}".format(com))
+    print("Running: {}\n".format(com))
     import subprocess
     subprocess.call(com, shell=True)
 
