@@ -24,7 +24,7 @@ begin
 
   if ( expmt .eq. "ref" ) then
     st = 66
-    et = 593
+    et = 485
   else
     st = 0
     et = 419

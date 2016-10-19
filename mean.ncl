@@ -25,7 +25,7 @@ begin
 
   if ( expmt .eq. "ref" ) then
     st = 66
-    et = 593
+    et = 485
     else if ( varname .eq. "ts" ) then
       st = 0
       et = 419
