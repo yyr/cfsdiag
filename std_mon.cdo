@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Monthly Climatology:
+cdo ymonmean ts_data.nc ts_data_ymonmean.nc
+
+# Anomalies:
+cdo sub ts_data.nc ts_data_ymonmean.nc ts_data_anom.nc
+
+# Standard deviation:
+cdo timstd ts_data_anom.nc ts_data_anom_timstd.nc
