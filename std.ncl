@@ -7,8 +7,6 @@ load "./config.ncl"
 
 begin
   type = "pdf"
-  ; varname = "tsfc"
-  ; expmt = "ftpc"                 ; "ref", "ftpc"
   diag = "std"
 
   varname_values = (/"tsfc", "prate", "ts"/)
