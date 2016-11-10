@@ -17,23 +17,14 @@ begin
   end if
 
   stref = 66
-  etref = 485
+  etref = 197
+  stftpc = 0
+  etftpc = 131
 
-  if ( varname .eq. "ts" ) then
-    stftpc = 0
-    etftpc = 419
-  else
-    stftpc = 3
-    etftpc = 422
-  end if
   sy = 2020
-  ey = 2054
+  ey = 2030
 
-  if ( varname .eq. "ts" ) then
-    fbit = "_1m_2020_2055_"
-  else
-    fbit = "_1m_2019_2055_"
-  end if
+  fbit = "_1m_2020_2030_"
 
   dirrfc = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
   dirftpc = "~/git/cfsdiag/cfs/cfs2_ftpc/orig/"

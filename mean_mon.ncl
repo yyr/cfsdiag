@@ -18,32 +18,24 @@ begin
     expmt = "ftpc"
   end if
 
-
   if ( expmt .eq. "ref" ) then
     st = 66
-    et = 485
-    else if ( varname .eq. "ts" ) then
-      st = 0
-      et = 419
-    else
-      st = 3
-      et = 422
-    end if
+    et = 197
+  else
+    st = 0
+    et = 131
   end if
 
   sy = 2020
-  ey = 2054
+  ey = 2030
 
   plotname = diag + "_" + expmt + "_" + varname
   dir = "~/git/cfsdiag/cfs/cfs2_" + expmt + "/orig/"
 
   if ( expmt .eq. "ref" ) then
     fbit = "_1m_2014_2064_"
-    else if ( varname .eq. "ts" ) then
-      fbit = "_1m_2020_2055_"
-    else
-      fbit = "_1m_2019_2055_"
-    end if
+  else
+    fbit = "_1m_2020_2030_"
   end if
 
   finname = "cfs2_" + expmt + fbit + varname + ".nc"
