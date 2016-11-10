@@ -17,7 +17,7 @@ begin
   end if
 
   stref = 66
-  etref = 485
+  etref = 197
 
   stftpc = 0
   etftpc = 131
