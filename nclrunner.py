@@ -38,8 +38,9 @@ def prepare_command(opts, scr):
     cmds = []
     for item in product(*value_list):
         # FIXME: ncl may get choked if numbers are passed as strings
-        v_list = ['\'{}="{}"\''.format(key[1:], val)
-                  for key, val in zip(keys, item)]
+        v_list = [
+            '\'{}="{}"\''.format(key[1:], val) for key, val in zip(keys, item)
+        ]
         cmds.append('ncl {} {scr}'.format(' '.join(v_list), scr=scr))
 
     return cmds
