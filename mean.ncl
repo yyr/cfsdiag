@@ -61,6 +61,11 @@ begin
     var_mean = dim_avg_n_Wrap(var(st:et,:,:),0)
   end if
 
+  if ( varname .eq. "prate" ) then
+    var_mean = var_mean * PRATE@UNITMULT
+  end if
+
+
   wks = gsn_open_wks(type,plotname)
 
   res = True
