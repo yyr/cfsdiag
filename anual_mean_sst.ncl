@@ -86,7 +86,7 @@ begin
 
   res = True
   res = set_res_no_frame(res)
-  res@gsnLeftString = "IR" + "_" + varname
+  res@gsnLeftString = reg + " SST (C)"
   res@xyLineColors      = (/"black", "blue", "red"/)          ; change line color
 
   res = set_res_legend(res)
