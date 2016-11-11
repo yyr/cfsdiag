@@ -14,4 +14,4 @@
 # ./nclrunner.py -varname "prate ts"  mean_ts.ncl
 
 # ./nclrunner.py -reg "nino wiod eiod"  anual_mean_sst.ncl
-# ./nclrunner.py -reg "nino wiod eiod"  interanual_vari_sst.ncl
+# ./nclrunner.py -reg "nino wiod eiod"  variablity_sst.ncl
