@@ -43,3 +43,17 @@ IR_N = 25.
 IR_W = 70.
 IR_E = 95.
 
+NINO_S = -5.
+NINO_N = 5.
+NINO_W = -170.
+NINO_E = -120.
+
+wIOD_S = -10.
+wIOD_N = 10.
+wIOD_W = 50.
+wIOD_E = 70.
+
+eIOD_S = -10.
+eIOD_N = 0.
+eIOD_W = 90.
+eIOD_E = 110.
