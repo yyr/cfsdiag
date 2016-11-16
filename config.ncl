@@ -5,6 +5,12 @@ TSFC@CNMIN = 250
 TSFC@CNMAX = 300
 TSFC@CNINT = 1.
 
+TC = True
+TC@COLORMAP = "WhBlGrYeRe"
+TC@CNMIN = -10
+TC@CNMAX = 35
+TC@CNINT = 1.
+
 PRATE = True
 PRATE@COLORMAP = "WhBlGrYeRe"
 PRATE@UNITMULT = 86400.         ; converts mm/day
