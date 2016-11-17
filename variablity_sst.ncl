@@ -71,8 +71,8 @@ begin
 
   obs_reg = obs_std({month| :}, {latitude | N:S}, {longitude | W:E})
   if ( reg .eq. "nino" ) then
-    W = W + 180
-    E = E + 180
+    W = W + 360.
+    E = E + 360.
   end if
   ref_reg = ref_std({month| :}, {lat | N:S}, {lon | W:E})
   ftc_reg = ftc_std({month| :}, {lat | N:S}, {lon | W:E})

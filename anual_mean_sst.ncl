@@ -71,8 +71,8 @@ begin
 
   obs_ir = obs_mean({month| :}, {latitude | N:S}, {longitude | W:E})
   if ( reg .eq. "nino" ) then
-    W = W + 180
-    E = E + 180
+    W = W + 360.
+    E = E + 360.
   end if
   ref_ir = ref_mean({month| :}, {lat | N:S}, {lon | W:E})
   ftc_ir = ftc_mean({month| :}, {lat | N:S}, {lon | W:E})
