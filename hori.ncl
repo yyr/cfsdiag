@@ -27,7 +27,7 @@ begin
   ppname(plotname,type)
   wks = gsn_open_wks(type,plotname)
 
-  plot = gsn_csm_contour(wks, var_mean, res)
+  plot = gsn_csm_contour_map(wks, var_mean, res)
 
   maximize_output(wks,True)
 end
