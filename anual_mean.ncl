@@ -18,6 +18,9 @@ begin
   refinf = "cfs2_ref_1m_2014_2064_prate.nc"
   ftcinf = "cfs2_ftpc_1m_2020_2030_prate.nc"
 
+  obsmaskinf = "precip.mon.mean.landmask.nc"
+  cfsmaskinf = "true_landmask.nc"
+
   stobs = 0
   etobs = 431
 
@@ -38,9 +41,22 @@ begin
   ref_prec = fr->prate
   ftc_prec = fs->prate
 
+  ; load the mask files
+  fom = addfile(obsdir + obsmaskinf, "r")
+  obs_mask = fom->LAND_GDS4_SFC_51
+
+  fcm = addfile(cfsmaskinf, "r")
+  cfs_mask = fcm->LAND_GDS4_SFC_51
+
   obs_mean = clmMonTLL(obs_prec(stobs:etobs,:,:))
   ref_mean = clmMonTLL(ref_prec(stref:etref,:,:))
   ftc_mean = clmMonTLL(ftc_prec(stftc:etftc,:,:))
+
+  do it = 0, 11, 1
+    obs_mean(it,:,:) = obs_mean(it,:,:) * obs_mask
+    ref_mean(it,:,:) = ref_mean(it,:,:) * cfs_mask
+    ftc_mean(it,:,:) = ftc_mean(it,:,:) * cfs_mask
+  end do
 
   ; printVarSummary(obs_mean)
   ; printVarSummary(ref_mean)
