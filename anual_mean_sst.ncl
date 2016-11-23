@@ -1,12 +1,19 @@
 ; Copyright (C) Yagnesh Raghava Yakkala. http://yagnesh.org
 ; Created: Friday, November 11 2016
 
-load "$nsc/is.ncl"
 load "$nsc/resources.ncl"
 load "./config.ncl"
 
 begin
-  reg = "nino"
+
+  input_args = (/"reg"/)
+
+  do it = 0, dimsizes(input_args) - 1, 1    ; doc
+    if ( .not. isdefined(input_args(it)) ) then
+      print("'" + input_args(it) + "' argument is not passed, Exiting..")
+      exit
+    end if
+  end do
 
   if ( reg .eq. "nino" ) then
     S = NINO_S
