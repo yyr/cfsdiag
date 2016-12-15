@@ -5,7 +5,7 @@
 
 begin
   dir = "~/git/cfsdiag/"
-  finname = "landmask.nc"
+  finname = "cfs/landmask.nc"
   foutname = "cfs_landmask.nc"
 
   f = addfile(dir + finname, "r")
