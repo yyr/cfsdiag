@@ -73,7 +73,7 @@ begin
   copy_VarCoords(std_ref,anom)
 
   if ( masking ) then
-    lmfh = addfile("true_landmask.nc","r")
+    lmfh = addfile("cfs_landmask.nc","r")
     lm = lmfh->LAND_GDS4_SFC_51
     ; printVarSummary(lm)
     anom(:,:) = where(lm.eq.1, lm@_FillValue,anom(:,:))

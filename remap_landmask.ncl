@@ -6,11 +6,10 @@
 begin
   dir = "~/git/cfsdiag/"
   finname = "landmask.nc"
-  foutname = "true_landmask.nc"
+  foutname = "cfs_landmask.nc"
 
   f = addfile(dir + finname, "r")
   fout = addfile(dir + foutname, "c")
-
 
 ;  print(getfilevarnames(f))
 
@@ -18,5 +17,4 @@ begin
   lm = where(lm.lt.0.5,0,1)
 
   fout->LAND_GDS4_SFC_51 = lm
-
 end

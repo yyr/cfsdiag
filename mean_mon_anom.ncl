@@ -63,7 +63,7 @@ begin
   copy_VarCoords(clim_ref,anom)
 
   if ( masking ) then
-    lmfh = addfile("true_landmask.nc","r")
+    lmfh = addfile("cfs_landmask.nc","r")
     lm = lmfh->LAND_GDS4_SFC_51
     ; printVarSummary(lm)
     do it = 0, 11, 1    ; doc
