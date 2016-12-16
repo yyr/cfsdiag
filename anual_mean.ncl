@@ -19,7 +19,7 @@ begin
   ftcinf = "cfs2_ftpc_1m_2020_2030_prate.nc"
 
   obsmaskinf = "precip.mon.mean.landmask.nc"
-  cfsmaskinf = "true_landmask.nc"
+  cfsmaskinf = "cfs_landmask.nc"
 
   stobs = 0
   etobs = 431
