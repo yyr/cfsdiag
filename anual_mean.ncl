@@ -14,12 +14,11 @@ begin
   refdir = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
   ftcdir = "~/git/cfsdiag/cfs/cfs2_ftpc/orig/"
 
-  obsinf = "precip.mon.mean.nc"
+  obsinf = "precip.mon.mean.cfsgrid.nc"
   refinf = "cfs2_ref_1m_2014_2064_prate.nc"
   ftcinf = "cfs2_ftpc_1m_2020_2030_prate.nc"
 
-  obsmaskinf = "precip.mon.mean.landmask.nc"
-  cfsmaskinf = "cfs_landmask.nc"
+  maskinf = "cfs2_global_slmask.cfsgrid.nc"
 
   stobs = 0
   etobs = 431
@@ -42,11 +41,8 @@ begin
   ftc_prec = fs->prate
 
   ; load the mask files
-  fom = addfile(obsdir + obsmaskinf, "r")
-  obs_mask = fom->LAND_GDS4_SFC_51
-
-  fcm = addfile(cfsmaskinf, "r")
-  cfs_mask = fcm->LAND_GDS4_SFC_51
+  fom = addfile(obsdir + maskinf, "r")
+  landmask = fom->LAND_GDS4_SFC_51
 
   obs_mean = clmMonTLL(obs_prec(stobs:etobs,:,:))
   ref_mean = clmMonTLL(ref_prec(stref:etref,:,:))
