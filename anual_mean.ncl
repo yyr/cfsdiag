@@ -49,9 +49,9 @@ begin
   ftc_mean = clmMonTLL(ftc_prec(stftc:etftc,:,:))
 
   do it = 0, 11, 1
-    obs_mean(it,:,:) = obs_mean(it,:,:) * obs_mask
-    ref_mean(it,:,:) = ref_mean(it,:,:) * cfs_mask
-    ftc_mean(it,:,:) = ftc_mean(it,:,:) * cfs_mask
+    obs_mean(it,:,:) = obs_mean(it,:,:) * landmask
+    ref_mean(it,:,:) = ref_mean(it,:,:) * landmask
+    ftc_mean(it,:,:) = ftc_mean(it,:,:) * landmask
   end do
 
   ; printVarSummary(obs_mean)
@@ -62,12 +62,31 @@ begin
   ref_ir = ref_mean({month| :}, {lat | IR_N: IR_S},{lon | IR_W:IR_E})
   ftc_ir = ftc_mean({month| :}, {lat | IR_N: IR_S},{lon | IR_W:IR_E})
 
-  obs_ir_ave = dim_avg_n_Wrap(obs_ir,(/1,2/))
-  ref_ir_ave = dim_avg_n_Wrap(ref_ir,(/1,2/))
-  ftc_ir_ave = dim_avg_n_Wrap(ftc_ir,(/1,2/))
+  ref_ir = ref_ir * PRATE@UNITMULT
+  ftc_ir = ftc_ir * PRATE@UNITMULT
 
-  ref_ir_ave = ref_ir_ave * PRATE@UNITMULT
-  ftc_ir_ave = ftc_ir_ave * PRATE@UNITMULT
+  ; obs_ir_ave = dim_avg_n_Wrap(obs_ir,(/1,2/))
+  ; ref_ir_ave = dim_avg_n_Wrap(ref_ir,(/1,2/))
+  ; ftc_ir_ave = dim_avg_n_Wrap(ftc_ir,(/1,2/))
+
+  obs_ir_ave = dim_sum_n_Wrap(obs_ir,(/1,2/))
+  ref_ir_ave = dim_sum_n_Wrap(ref_ir,(/1,2/))
+  ftc_ir_ave = dim_sum_n_Wrap(ftc_ir,(/1,2/))
+
+  obs_ir_ave = dim_sum_n_Wrap(obs_ir,(/1,2/))/num(ind(ndtooned(obs_ir).ne.0))
+  ref_ir_ave = dim_sum_n_Wrap(ref_ir,(/1,2/))/num(ind(ndtooned(ref_ir).ne.0))
+  ftc_ir_ave = dim_sum_n_Wrap(ftc_ir,(/1,2/))/num(ind(ndtooned(ftc_ir).ne.0))
+
+  ; land_grids
+  ; print(num(ind(ndtooned(obs_ir).ne.9999)))
+  ; print(num(ind(ndtooned(ref_ir).ne.9999)))
+  ; print(num(ind(ndtooned(ftc_ir).ne.9999)))
+
+  ; print(num(ind(ndtooned(obs_ir).ne.0)))
+  ; print(num(ind(ndtooned(ref_ir).ne.0)))
+  ; print(num(ind(ndtooned(ftc_ir).ne.0)))
+  ; print(num(ind(ref_ir.ne.0)))
+
 
   res = True
   res = set_res_no_frame(res)
