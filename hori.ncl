@@ -9,7 +9,7 @@ begin
   type = "pdf"
 
   indir = "./cfs/obs/"
-  infile = "HadISST_sst.nc"
+  infile = "HadISST_sst_cfsgrid.nc"
 
   fh = addfile(indir + infile, "r")
   varname = "sst"
@@ -22,7 +22,7 @@ begin
   res = set_res_cn(res)
   set_res_cn_limits(res,TC@CNMIN, TC@CNMAX, TC@CNINT)
 
-  plotname =  "hori" + "_" + varname
+  plotname =  "hori_cfsgrid" + "_" + varname
 
   ppname(plotname,type)
   wks = gsn_open_wks(type,plotname)
