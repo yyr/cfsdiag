@@ -11,4 +11,4 @@ yfirst   = 90
 yinc     = -1
 EOF
 
-cdo remapbil,/tmp/landmask cfs/cfs2_global_slmask.t126.nc cfs/landmask.nc
+cdo remapbil,/tmp/landmask cfs/cfs2_global_slmask.t126.nc cfs/obs/cfs2_global_slmask.cfsgrid.dirty.nc
