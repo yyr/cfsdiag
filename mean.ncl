@@ -8,8 +8,8 @@ load "./config.ncl"
 begin
   type = "pdf"
   diag = "mean"
-  varname_values = (/"tsfc", "prate", "ts"/)
-  expmt_values = (/"ftpc", "ref"/)
+  varname_values = (/"mslp", "prate", "ts"/)
+  expmt_values = (/"ftpc", "ref", "obs"/)
 
   store_nc = False
 
@@ -33,7 +33,11 @@ begin
 
   plotname = diag + "_" + expmt + "_" + varname
 
-  dir = "~/git/cfsdiag/cfs/cfs2_" + expmt + "/orig/"
+  if ( expmt .eq. "obs" ) then
+    dir = "~/git/cfsdiag/cfs/" + expmt + "/"
+  else
+    dir = "~/git/cfsdiag/cfs/cfs2_" + expmt + "/orig/"
+  end if
 
   if ( expmt .eq. "ref" ) then
     fbit = "_1m_2014_2064_"
@@ -41,10 +45,33 @@ begin
     fbit = "_1m_2020_2030_"
   end if
 
-  finname = "cfs2_" + expmt + fbit + varname + ".nc"
+  if ( expmt .eq. "obs" ) then
+    if ( varname .eq. "prate" ) then
+        finname = "precip.mon.mean.cfsgrid.nc"
+      else if ( varname .eq. "ts" ) then
+        finname = "HadISST_sst_cfsgrid.nc"
+      else
+        print("skipping; NO INPUT" )
+        exit
+      end if
+    end if
+  else
+    finname = "cfs2_" + expmt + fbit + varname + ".nc"
+  end if
+
   f = addfile(dir + finname, "r")
 
-  var = f->$varname$
+  if ( expmt .eq. "obs" ) then
+    if ( varname .eq. "prate" ) then
+      var = f->precip
+      else if ( varname .eq. "ts" ) then
+        var = f->sst
+      end if
+    end if
+  else
+    var = f->$varname$
+  end if
+
 ;  printMinMax(var,True)
 
   if ( varname .eq. "tsfc" ) then
@@ -53,8 +80,12 @@ begin
     var_mean = dim_avg_n_Wrap(var(st:et,:,:),0)
   end if
 
-  if ( varname .eq. "prate" ) then
+  if ( varname .eq. "prate" .and. expmt .ne. "obs" ) then
     var_mean = var_mean * PRATE@UNITMULT
+  end if
+
+  if ( varname .eq. "ts" .and. expmt .eq. "obs" ) then
+    var_mean = var_mean + C2T
   end if
 
 
