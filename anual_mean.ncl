@@ -96,7 +96,7 @@ begin
   res = set_res_legend(res)
   res@xyExplicitLegendLabels = (/" obs", " ref"," ftpc" /)         ; create explicit labels
 
-  plotname =  "annual_cycle" + "_" + varname + "_" + reg
+  plotname =  "anual_cycle" + "_" + varname + "_" + reg
   ppname(plotname,type)
   wks = gsn_open_wks(type,plotname)
 
