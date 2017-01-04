@@ -44,6 +44,7 @@ ANOM_PRATE@CNMIN = -3.
 ANOM_PRATE@CNMAX = 3.
 ANOM_PRATE@CNINT = 0.25
 
+; Regions
 IR_S = 5.
 IR_N = 25.
 IR_W = 70.
@@ -63,3 +64,6 @@ eIOD_S = -10.
 eIOD_N = 0.
 eIOD_W = 90.
 eIOD_E = 110.
+
+; Constants
+C2T = 273.15
