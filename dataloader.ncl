@@ -92,7 +92,7 @@ function cfsdiag_set_cn_limits(res_in, varname, diag)
 local res_in, varname, diag
 
 begin
-  if ( daig .eq. "mean" ) then
+  if ( diag .eq. "mean" ) then
     if ( varname .eq. "prate" ) then
       set_res_cn_limits(res_in, PRATE@CNMIN, PRATE@CNMAX, PRATE@CNINT)
       else if ( varname .eq. "ts" .or. varname .eq. "tsfc" ) then
@@ -101,7 +101,7 @@ begin
     end if
   end if
 
-  if ( daig .eq. "std" ) then
+  if ( diag .eq. "std" ) then
     set_res_cn_limits(res_in, STD@CNMIN, STD@CNMAX, STD@CNINT)
   end if
   return(res_in)
