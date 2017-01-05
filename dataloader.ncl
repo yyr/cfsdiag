@@ -21,6 +21,15 @@ begin
     et = 131
   end if
 
+  if ( expmt .eq. "obs" .and. varname .eq. "prate"  ) then
+    st = 0
+    et = 431
+    else if ( expmt .eq. "obs" .and. varname .eq. "ts"  ) then
+      st = 0
+      et = 1751
+    end if
+  end if
+
   sy = 2020
   ey = 2030
 
@@ -54,9 +63,9 @@ begin
 
   if ( expmt .eq. "obs" ) then
     if ( varname .eq. "prate" ) then
-      var = f->precip
+      var = f->precip(st:et,:,:)
       else if ( varname .eq. "ts" ) then
-        var = f->sst
+        var = f->sst(st:et,:,:)
       end if
     end if
   else
@@ -115,7 +124,7 @@ local varname
 
 begin
   if ( varname .eq. "prate" ) then
-      gsn_define_colormap(wks,PRATE@COLORMAP)
+    gsn_define_colormap(wks,PRATE@COLORMAP)
     else if ( varname .eq. "ts" .or. varname .eq. "tsfc" ) then
       gsn_define_colormap(wks,TSFC@COLORMAP)
     end if
