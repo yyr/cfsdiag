@@ -11,8 +11,6 @@ begin
   varname_values = (/"mslp", "prate", "ts"/)
   expmt_values = (/"ftpc", "ref", "obs"/)
 
-  store_nc = False
-
   if ( .not. isdefined("varname") ) then
     varname = "tsfc"
   end if
@@ -111,13 +109,4 @@ begin
   end if
 
   plot = gsn_csm_contour_map(wks, var_mean, res)
-
-  ; output
-  if ( store_nc ) then
-    foutname = diag + "_" + expmt + "_" + varname + "_" + sy + "_" + ey + ".nc"
-    system("rm " + foutname)
-    out = addfile(foutname, "c")
-    outvarname = "clim_" + varname
-  end if
-
 end
