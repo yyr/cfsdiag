@@ -3,61 +3,24 @@
 
 load "$nsc/is.ncl"
 load "$nsc/resources.ncl"
-load "./config.ncl"
+load "./cfsdiag.ncl"
 
 begin
   reg = "ir"
   type = "pdf"
   varname = "prate"
 
-  obsdir = "~/git/cfsdiag/cfs/obs/"
-  refdir = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
-  ftcdir = "~/git/cfsdiag/cfs/cfs2_ftpc/orig/"
+  var_obs  = load_data("obs", varname)
+  var_ref  = load_data("ref", varname)
+  var_ftpc = load_data("ftpc", varname)
 
-  obsinf = "precip.mon.mean.nc"
-  refinf = "cfs2_ref_1m_2014_2064_prate.nc"
-  ftcinf = "cfs2_ftpc_1m_2020_2030_prate.nc"
+  obs_std = stdMonTLL(var_obs)
+  ref_std = stdMonTLL(var_ref)
+  ftc_std = stdMonTLL(var_ftpc)
 
-  obsmaskinf = "precip.mon.mean.landmask.nc"
-  cfsmaskinf = "cfs_landmask.nc"
-
-  stobs = 0
-  etobs = 431
-
-  stref = 66
-  etref = 197
-
-  stftc = 0
-  etftc = 131
-
-  sy = 2020
-  ey = 2030
-
-  fo = addfile(obsdir + obsinf, "r")
-  fr = addfile(refdir + refinf, "r")
-  fs = addfile(ftcdir + ftcinf, "r")
-
-  obs_prec = fo->precip
-  ref_prec = fr->prate
-  ftc_prec = fs->prate
-
-  ; load the mask files
-  fom = addfile(obsdir + obsmaskinf, "r")
-  obs_mask = fom->LAND_GDS4_SFC_51
-
-  fcm = addfile(cfsmaskinf, "r")
-  cfs_mask = fcm->LAND_GDS4_SFC_51
-
-
-  obs_std = stdMonTLL(obs_prec(stobs:etobs,:,:))
-  ref_std = stdMonTLL(ref_prec(stref:etref,:,:))
-  ftc_std = stdMonTLL(ftc_prec(stftc:etftc,:,:))
-
-  do it = 0, 11, 1
-    obs_std(it,:,:) = obs_std(it,:,:) * obs_mask
-    ref_std(it,:,:) = ref_std(it,:,:) * cfs_mask
-    ftc_std(it,:,:) = ftc_std(it,:,:) * cfs_mask
-  end do
+  landmask(obs_std)
+  landmask(ref_std)
+  landmask(ftc_std)
 
   ; printVarSummary(obs_std)
   ; printVarSummary(ref_std)
@@ -70,9 +33,6 @@ begin
   obs_ir_ave = dim_avg_n_Wrap(obs_ir,(/1,2/))
   ref_ir_ave = dim_avg_n_Wrap(ref_ir,(/1,2/))
   ftc_ir_ave = dim_avg_n_Wrap(ftc_ir,(/1,2/))
-
-  ref_ir_ave = ref_ir_ave * PRATE@UNITMULT
-  ftc_ir_ave = ftc_ir_ave * PRATE@UNITMULT
 
   res = True
   res = set_res_no_frame(res)
