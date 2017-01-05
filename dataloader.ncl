@@ -11,7 +11,6 @@ undef("load_data")
 function load_data(expmt, varname)
 local var, expmt, varname
 
-
 begin
   if ( expmt .eq. "ref" ) then
     st = 66
@@ -84,6 +83,36 @@ begin
 end
 
 ;_____________________________________________________________________________
+; Function: load_landmask
+; Doc:
+;_____________________________________________________________________________
+undef("load_landmask")
+function load_landmask()
+local f, dir, finname
+
+begin
+  dir = "~/git/cfsdiag/cfs/obs/"
+  finname = "cfs2_global_slmask.cfsgrid.nc"
+  f = addfile(dir + finname, "r")
+  return(f->LAND_GDS4_SFC_51)
+end
+
+;_____________________________________________________________________________
+; procedure: landmask
+; Doc:
+;_____________________________________________________________________________
+undef("landmask")
+procedure landmask(var:numeric)
+local lm
+
+begin
+    lm = load_landmask()
+    var(:,:) = where(lm.eq.1, lm@_FillValue,var(:,:))
+    var@_FillValue = lm@_FillValue
+  return
+end
+
+;_____________________________________________________________________________
 ; Function: cfsdiag_set_cn_limits
 ; Doc:
 ;_____________________________________________________________________________
@@ -104,6 +133,16 @@ begin
   if ( diag .eq. "std" ) then
     set_res_cn_limits(res_in, STD@CNMIN, STD@CNMAX, STD@CNINT)
   end if
+
+  if ( diag .eq. "anom" ) then
+    if ( varname .eq. "prate" ) then
+      set_res_cn_limits(res_in,ANOM_PRATE@CNMIN, ANOM_PRATE@CNMAX, ANOM_PRATE@CNINT)
+      else if ( varname .eq. "ts" .or. varname .eq. "tsfc" ) then
+        set_res_cn_limits(res_in,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
+      end if
+    end if
+  end if
+
   return(res_in)
 end
 
@@ -116,6 +155,7 @@ procedure cfsdiag_set_res_colormap(wks, varname:string)
 local varname
 
 begin
+
   if ( varname .eq. "prate" ) then
     gsn_define_colormap(wks,PRATE@COLORMAP)
     else if ( varname .eq. "ts" .or. varname .eq. "tsfc" ) then
