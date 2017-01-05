@@ -135,7 +135,7 @@ begin
 
   f = addfile(dir + finname, "r")
 
-  time = f->time(st:st)
+  time = f->time(st:et)
   return(cd_calendar(time,0))
 end
 
