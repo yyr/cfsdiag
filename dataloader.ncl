@@ -93,6 +93,19 @@ begin
 end
 
 ;_____________________________________________________________________________
+; Function: cfsdiag_set_std_cn_limits
+; Doc:
+;_____________________________________________________________________________
+undef("cfsdiag_set_std_cn_limits")
+function cfsdiag_set_std_cn_limits(res_in, varname)
+local res_in, varname
+
+begin
+  set_res_cn_limits(res_in, STD@CNMIN, STD@CNMAX, STD@CNINT)
+  return(res_in)
+end
+
+;_____________________________________________________________________________
 ; Function: cfsdiag_set_res_colormap
 ; Doc:
 ;_____________________________________________________________________________
