@@ -3,75 +3,28 @@
 
 load "$nsc/is.ncl"
 load "$nsc/resources.ncl"
-load "./config.ncl"
+load "./cfsdiag.ncl"
 
 begin
-  store_nc = False
-  ; varname = "tsfc"
-  varname_values = (/"tsfc", "prate", "ts"/)
   type = "pdf"
   diag = "mean_yr"
 
-  if ( .not. isdefined("varname") ) then
-    varname = "tsfc"
-  end if
+  expmt1 = "ref"
+  expmt2 = "ftpc"
 
-  stref = 66
-  etref = 197
-  stftpc = 0
-  etftpc = 131
+  plotname = diag + "_" + varname
+  wks = gsn_open_wks(type,plotname)
 
-  sy = 2020
-  ey = 2030
+  var1 = load_data(expmt1, varname)
+  var2 = load_data(expmt2, varname)
 
-  fbit = "_1m_2020_2030_"
+  clim1 = dim_avg_n_Wrap(var1,(/1,2/))
+  clim2 = dim_avg_n_Wrap(var2,(/1,2/))
 
-  dirrfc = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
-  dirftpc = "~/git/cfsdiag/cfs/cfs2_ftpc/orig/"
-  finrfc = "cfs2_ref_1m_2014_2064_" + varname + ".nc"
-  finftpc = "cfs2_ftpc" + fbit + varname + ".nc"
+  mr = month_to_annual(clim1,0) ; yearly mean.
+  mn = month_to_annual(clim2,0)
 
-  fr = addfile(dirrfc + finrfc, "r")
-  fs = addfile(dirftpc + finftpc, "r")
-
-  var_ref = fr->$varname$
-  var_ftpc = fs->$varname$
-
-  if ( varname .eq. "tsfc" ) then
-    clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,0,:,:),(/1,2/)) ; t dim has some odd beg end values
-    clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,0,:,:),(/1,2/)) ; t dim has some odd beg end values
-    masking = True
-  end if
-
-  if ( varname .eq. "ts" ) then
-    clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,:,:),(/1,2/)) ; t dim has some odd beg end values
-    clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,:,:),(/1,2/)) ; t dim has some odd beg end values
-    masking = False
-  end if
-
-
-  if ( varname .eq. "prate" ) then
-    clim_ref = dim_avg_n_Wrap(var_ref(stref:etref,:,:),(/1,2/)) ; t dim has some odd beg end values
-    clim_ftpc = dim_avg_n_Wrap(var_ftpc(stftpc:etftpc,:,:),(/1,2/)) ; t dim has some odd beg end values
-
-    clim_ftpc = clim_ftpc * PRATE@UNITMULT
-    clim_ref = clim_ref * PRATE@UNITMULT
-    masking = False
-  end if
-
-  if ( varname .ne. "prate" ) then
-    mr = month_to_annual(clim_ref,1) ; yearly mean.
-    mn = month_to_annual(clim_ftpc,1)
-  else
-    mr = month_to_annual(clim_ref,0) ; yearly mean.
-    mn = month_to_annual(clim_ftpc,0)
-  end if
-
-  time = fr->time(stref:etref)
-  utc = cd_calendar(time,0)
-  ; printVarSummary(mr)
-  ; printVarSummary(mn)
-  ; printVarSummary(time)
+  utc = get_time(expmt1)
 
   res = True
   res = set_res_no_frame(res)
@@ -81,9 +34,7 @@ begin
   res = set_res_legend(res)
   res@xyExplicitLegendLabels = (/" ref"," ftpc"/)         ; create explicit labels
 
-  plotname = diag + "_" + varname
   ppname(plotname,type)
-  wks = gsn_open_wks(type,plotname)
 
   plot = gsn_csm_xy(wks, utc(::12,0), (/mr,mn/), res)
   maximize_output(wks,True)
