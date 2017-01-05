@@ -88,29 +88,22 @@ end
 ; Doc:
 ;_____________________________________________________________________________
 undef("cfsdiag_set_cn_limits")
-function cfsdiag_set_cn_limits(res_in, varname)
-local res_in, varname
+function cfsdiag_set_cn_limits(res_in, varname, diag)
+local res_in, varname, diag
 
 begin
-  if ( varname .eq. "prate" ) then
-    set_res_cn_limits(res_in, PRATE@CNMIN, PRATE@CNMAX, PRATE@CNINT)
-    else if ( varname .eq. "ts" .or. varname .eq. "tsfc" ) then
-      set_res_cn_limits(res_in,TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
+  if ( daig .eq. "mean" ) then
+    if ( varname .eq. "prate" ) then
+      set_res_cn_limits(res_in, PRATE@CNMIN, PRATE@CNMAX, PRATE@CNINT)
+      else if ( varname .eq. "ts" .or. varname .eq. "tsfc" ) then
+        set_res_cn_limits(res_in,TSFC@CNMIN, TSFC@CNMAX, TSFC@CNINT)
+      end if
     end if
   end if
-  return(res_in)
-end
 
-;_____________________________________________________________________________
-; Function: cfsdiag_set_std_cn_limits
-; Doc:
-;_____________________________________________________________________________
-undef("cfsdiag_set_std_cn_limits")
-function cfsdiag_set_std_cn_limits(res_in, varname)
-local res_in, varname
-
-begin
-  set_res_cn_limits(res_in, STD@CNMIN, STD@CNMAX, STD@CNINT)
+  if ( daig .eq. "std" ) then
+    set_res_cn_limits(res_in, STD@CNMIN, STD@CNMAX, STD@CNINT)
+  end if
   return(res_in)
 end
 

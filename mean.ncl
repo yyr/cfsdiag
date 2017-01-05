@@ -24,7 +24,7 @@ begin
 
   ppname(plotname,type)
 
-  res = cfsdiag_set_cn_limits(res, varname)
+  res = cfsdiag_set_cn_limits(res, varname, daig)
   cfsdiag_set_res_colormap(wks, varname)
 
   plot = gsn_csm_contour_map(wks, var_mean, res)

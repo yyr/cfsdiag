@@ -24,7 +24,7 @@ begin
 
   ppname(plotname,type)
 
-  res = cfsdiag_set_cn_limits(res, varname)
+  res = cfsdiag_set_cn_limits(res, varname, diag)
   cfsdiag_set_res_colormap(wks, varname)
   res = set_res_centered_pacific(res)   ; make pacific center.
 
