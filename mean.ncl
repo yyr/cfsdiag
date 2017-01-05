@@ -3,7 +3,7 @@
 
 load "$nsc/is.ncl"
 load "$nsc/resources.ncl"
-load "./dataloader.ncl"
+load "./cfsdiag.ncl"
 
 begin
   type = "pdf"
