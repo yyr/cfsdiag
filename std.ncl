@@ -14,7 +14,7 @@ begin
 
   var = load_data(expmt, varname)
 
-  var_std_mon = stdMonTLL(var) ; to negate yearly cycle
+  var_std_mon = stdMonTLL(var)
   var_std = dim_avg_n_Wrap(var_std_mon,0)
 
   printMinMax(var_std,True)
