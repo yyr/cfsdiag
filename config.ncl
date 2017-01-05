@@ -1,9 +1,9 @@
 ; gsn_define_colormap(wks,"WhBlGrYeRe")   ; overwrite the .hluresfile color map
 TSFC = True
 TSFC@COLORMAP = "WhBlGrYeRe"
-TSFC@CNMIN = 250
-TSFC@CNMAX = 300
-TSFC@CNINT = 1.
+TSFC@CNMIN = 270
+TSFC@CNMAX = 305
+TSFC@CNINT = 0.5
 
 TC = True
 TC@COLORMAP = "WhBlGrYeRe"
@@ -15,7 +15,7 @@ PRATE = True
 PRATE@COLORMAP = "WhBlGrYeRe"
 PRATE@UNITMULT = 86400.         ; converts mm/day
 PRATE@CNMIN = 0
-PRATE@CNMAX = 10.
+PRATE@CNMAX = 20.
 PRATE@CNINT = 0.5
 
 SLP = True
