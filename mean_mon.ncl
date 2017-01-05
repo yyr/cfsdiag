@@ -20,7 +20,6 @@ begin
   res = True
   res = set_res_cn(res)
   res@gsnLeftString = diag + "_"  + expmt + "_" + varname
-  res = set_res_cn(res)
   res@cnLinesOn = False
 
   ppname(plotname,type)

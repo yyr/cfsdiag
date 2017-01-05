@@ -75,7 +75,6 @@ begin
   res = True
   res = set_res_cn(res)
   res@gsnLeftString = diag + "_" + varname
-  res = set_res_cn(res)
   res@cnLinesOn = False
 
   plotname = diag + "_" + varname
