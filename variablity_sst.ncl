@@ -3,10 +3,15 @@
 
 load "$nsc/is.ncl"
 load "$nsc/resources.ncl"
-load "./config.ncl"
+load "./cfsdiag.ncl"
 
 begin
-  ; reg = "wiod"
+  type = "pdf"
+  varname = "ts"
+  diag = "variablity"
+
+  plotname =  "variablity" + "_" + "sst" + "_" + reg
+  wks = gsn_open_wks(type,plotname)
 
   if ( reg .eq. "nino" ) then
     S = NINO_S
@@ -29,51 +34,20 @@ begin
     E = eIOD_E
   end if
 
+  var_obs  = load_data("obs", varname)
+  var_ref  = load_data("ref", varname)
+  var_ftpc = load_data("ftpc", varname)
 
-  type = "pdf"
-  varname = "sst"
+  obs_std = stdMonTLL(var_obs)
+  ref_std = stdMonTLL(var_ref)
+  ftc_std = stdMonTLL(var_ftpc)
 
-  obsdir = "~/git/cfsdiag/cfs/obs/"
-  refdir = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
-  ftcdir = "~/git/cfsdiag/cfs/cfs2_ftpc/orig/"
-
-  obsinf = "HadISST_sst.nc"
-  refinf = "cfs2_ref_1m_2014_2064_ts.nc"
-  ftcinf = "cfs2_ftpc_1m_2020_2030_ts.nc"
-
-  stobs = 0
-  etobs = 1751
-
-  stref = 66
-  etref = 197
-
-  stftc = 0
-  etftc = 131
-
-  sy = 2020
-  ey = 2030
-
-  fo = addfile(obsdir + obsinf, "r")
-  fr = addfile(refdir + refinf, "r")
-  fs = addfile(ftcdir + ftcinf, "r")
-
-  obs_var = fo->sst
-  ref_var = fr->ts
-  ftc_var = fs->ts
-
-  obs_std = stdMonTLL(obs_var(stobs:etobs,:,:))
-  ref_std = stdMonTLL(ref_var(stref:etref,:,:))
-  ftc_std = stdMonTLL(ftc_var(stftc:etftc,:,:))
-
-  ; printVarSummary(obs_std)
-  ; printVarSummary(ref_std)
-  ; printVarSummary(ftc_std)
-
-  obs_reg = obs_std({month| :}, {latitude | N:S}, {longitude | W:E})
   if ( reg .eq. "nino" ) then
     W = W + 360.
     E = E + 360.
   end if
+
+  obs_reg = obs_std({month| :}, {lat | N:S}, {lon | W:E})
   ref_reg = ref_std({month| :}, {lat | N:S}, {lon | W:E})
   ftc_reg = ftc_std({month| :}, {lat | N:S}, {lon | W:E})
 
@@ -89,10 +63,7 @@ begin
   res = set_res_legend(res)
   res@xyExplicitLegendLabels = (/" obs", " ref"," ftpc" /)         ; create explicit labels
 
-  plotname =  "variablity" + "_" + varname + "_" + reg
   ppname(plotname,type)
-  wks = gsn_open_wks(type,plotname)
-
   plot = gsn_csm_xy(wks, ispan(1,12,1), \
                     (/obs_reg_ave, ref_reg_ave, ftc_reg_ave/), res)
   maximize_output(wks,True)
