@@ -8,9 +8,10 @@ load "./cfsdiag.ncl"
 begin
   type = "pdf"
   diag = "mean_anom"
+  masking = False
+
   expmt1 = "ref"
   expmt2 = "ftpc"
-  masking = False
 
   plotname = diag + "_" + varname
   wks = gsn_open_wks(type,plotname)
