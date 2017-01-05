@@ -5,12 +5,12 @@ load "./config.ncl"
 load "$nsc/generic.ncl"
 
 ;_____________________________________________________________________________
-; Function: load_data
+; Function: time_indices
 ; Doc:
 ;_____________________________________________________________________________
-undef("load_data")
-function load_data(expmt, varname)
-local var, expmt, varname
+undef("time_indices")
+function time_indices(expmt, varname)
+local expmt, varname, st, et
 
 begin
   if ( expmt .eq. "ref" ) then
@@ -30,6 +30,18 @@ begin
     end if
   end if
 
+  return((/st, et/))
+end
+
+;_____________________________________________________________________________
+; Function: get_filenames
+; Doc:
+;_____________________________________________________________________________
+undef("get_filenames")
+function get_filenames(expmt, varname)
+local dir, finname, fbit, expmt, varname
+
+begin
   sy = 2020
   ey = 2030
 
@@ -59,6 +71,27 @@ begin
     finname = "cfs2_" + expmt + fbit + varname + ".nc"
   end if
 
+  return((/dir, finname/))
+end
+
+
+;_____________________________________________________________________________
+; Function: load_data
+; Doc:
+;_____________________________________________________________________________
+undef("load_data")
+function load_data(expmt, varname)
+local var, expmt, varname, st, et
+
+begin
+  inds = time_indices(expmt, varname)
+  st = inds(0)
+  et = inds(1)
+
+  fins = get_filenames(expmt, varname)
+  dir = fins(0)
+  finname = fins(1)
+
   f = addfile(dir + finname, "r")
 
   if ( expmt .eq. "obs" ) then
@@ -82,6 +115,30 @@ begin
 
   return(var)
 end
+
+;_____________________________________________________________________________
+; Function: get_time
+; Doc:
+;_____________________________________________________________________________
+undef("get_time")
+function get_time(expmt:string)
+local st, et, time, inds, fins
+
+begin
+  inds = time_indices(expmt, varname)
+  st = inds(0)
+  et = inds(1)
+
+  fins = get_filenames(expmt, varname)
+  dir = fins(0)
+  finname = fins(1)
+
+  f = addfile(dir + finname, "r")
+
+  time = f->time(st:st)
+  return(cd_calendar(time,0))
+end
+
 
 ;_____________________________________________________________________________
 ; Function: load_landmask
