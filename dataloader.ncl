@@ -97,7 +97,7 @@ end
 ; Doc:
 ;_____________________________________________________________________________
 undef("cfsdiag_set_res_colormap")
-procedure cfsdiag_set_res_colormap(wks, varname)
+procedure cfsdiag_set_res_colormap(wks, varname:string)
 local varname
 
 begin
