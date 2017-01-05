@@ -3,81 +3,38 @@
 
 load "$nsc/is.ncl"
 load "$nsc/resources.ncl"
-load "./config.ncl"
+load "./cfsdiag.ncl"
 
 begin
-  varname_values = (/"tsfc", "prate", "ts"/)
   type = "pdf"
   diag = "std_anom"
   masking = False
 
-  if ( .not. isdefined("varname") ) then
-    varname = "tsfc"
-  end if
+  expmt1 = "ref"
+  expmt2 = "ftpc"
 
-  stref = 66
-  etref = 197
+  plotname = diag + "_" + varname
+  wks = gsn_open_wks(type,plotname)
 
-  stftpc = 0
-  etftpc = 131
+  var1 = load_data(expmt1, varname)
+  var2 = load_data(expmt2, varname)
 
-  sy = 2020
-  ey = 2030
+  std1mon = stdMonTLL(var1)
+  std1 = dim_avg_n_Wrap(std1mon,0)
 
-  fbit = "_1m_2020_2030_"
+  std2mon = stdMonTLL(var2)
+  std2 = dim_avg_n_Wrap(std2mon,0)
 
-  dirrfc = "~/git/cfsdiag/cfs/cfs2_ref/orig/"
-  dirftpc = "~/git/cfsdiag/cfs/cfs2_ftpc/orig/"
-  finrfc = "cfs2_ref_1m_2014_2064_" + varname + ".nc"
-  finftpc = "cfs2_ftpc" + fbit + varname + ".nc"
-
-  fr = addfile(dirrfc + finrfc, "r")
-  fs = addfile(dirftpc + finftpc, "r")
-
-  var_ref = fr->$varname$
-  var_ftpc = fs->$varname$
-
-  ; NOTE: the calculation method tsfc and ts are varies
-  ; they yeild mostly same results though.
-  if ( varname .eq. "tsfc" ) then
-    clm_ref = clmMonTLL(var_ref(stref:etref,0,:,:)) ; monthly climatology
-    xAnom = calcMonAnomTLL(var_ref(stref:etref,0,:,:),clm_ref)
-    std_ref = dim_stddev_n_Wrap(xAnom,0)
-
-    clm_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,0,:,:)) ; monthly climatology
-    xAnom = calcMonAnomTLL(var_ftpc(stftpc:etftpc,0,:,:),clm_ftpc)
-    std_ftpc = dim_stddev_n_Wrap(xAnom,0)
-  end if
+  anom = std1 - std2
+  printMinMax(anom,True)
+  copy_VarCoords(std1,anom)
 
   if ( varname .eq. "ts" ) then
-    std_ref_mon = stdMonTLL(var_ref(stref:etref,:,:))
-    std_ref = dim_avg_n_Wrap(std_ref_mon,0)
-
-    std_ftpc_mon = stdMonTLL(var_ftpc(stftpc:etftpc,:,:))
-    std_ftpc = dim_avg_n_Wrap(std_ftpc_mon,0)
+    masking = True
   end if
-
-  if ( varname .eq. "prate" ) then
-    var_ref = var_ref * PRATE@UNITMULT
-    var_ftpc = var_ftpc * PRATE@UNITMULT
-
-    std_ref_mon = stdMonTLL(var_ref(stref:etref,:,:))
-    std_ref = dim_avg_n_Wrap(std_ref_mon,0)
-
-    std_ftpc_mon = stdMonTLL(var_ftpc(stftpc:etftpc,:,:))
-    std_ftpc = dim_avg_n_Wrap(std_ftpc_mon,0)
-  end if
-
-  anom = std_ref - std_ftpc
-  printMinMax(anom,True)
-  copy_VarCoords(std_ref,anom)
 
   if ( masking ) then
-    lmfh = addfile("cfs_landmask.nc","r")
-    lm = lmfh->LAND_GDS4_SFC_51
-    ; printVarSummary(lm)
-    anom(:,:) = where(lm.eq.1, lm@_FillValue,anom(:,:))
-    anom@_FillValue = lm@_FillValue
+    landmask(anom)
   end if
 
   res = True
@@ -85,26 +42,22 @@ begin
   res@gsnLeftString = diag + "_" + varname
   res@cnLinesOn = False
 
-  plotname = diag + "_" + varname
-  wks = gsn_open_wks(type,plotname)
   ppname(plotname,type)
-  if ( varname .eq. "prate" ) then
-    gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
-    set_res_cn_limits(res,ANOM_PRATE@CNMIN, ANOM_PRATE@CNMAX, ANOM_PRATE@CNINT)
-    else if ( varname .eq. "tsfc" ) then
-      gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
-      set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
-      else if ( varname .eq. "ts" ) then
-        gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
-        set_res_cn_limits(res,ANOM_TSFC@CNMIN, ANOM_TSFC@CNMAX, ANOM_TSFC@CNINT)
-      end if
-    end if
-  end if
-
-  ; make pacific center.
-  res@mpMinLonF=0
-  res@mpMaxLonF=360
-  res@mpCenterLonF=180
+  res = cfsdiag_set_cn_limits(res, varname, "anom")
+  gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
+  res = set_res_centered_pacific(res)   ; make pacific center.
 
   plot = gsn_csm_contour_map(wks, anom, res)
 end
+
+; NOTE: the calculation method tsfc and ts are varies
+; they yeild mostly same results though.
+; if ( varname .eq. "tsfc" ) then
+;   clm_ref = clmMonTLL(var_ref(stref:etref,0,:,:)) ; monthly climatology
+;   xAnom = calcMonAnomTLL(var_ref(stref:etref,0,:,:),clm_ref)
+;   std_ref = dim_stddev_n_Wrap(xAnom,0)
+
+;   clm_ftpc = clmMonTLL(var_ftpc(stftpc:etftpc,0,:,:)) ; monthly climatology
+;   xAnom = calcMonAnomTLL(var_ftpc(stftpc:etftpc,0,:,:),clm_ftpc)
+;   std_ftpc = dim_stddev_n_Wrap(xAnom,0)
+; end if
