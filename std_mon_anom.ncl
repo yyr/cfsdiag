@@ -6,7 +6,6 @@ load "$nsc/resources.ncl"
 load "./config.ncl"
 
 begin
-  store_nc = False
   ; varname = "tsfc"
   varname_values = (/"tsfc", "prate", "ts"/)
   type = "pdf"
@@ -110,13 +109,4 @@ begin
     res@gsnCenterString = month_name(it)
     plot = gsn_csm_contour_map(wks, anom(it,:,:), res)
   end do
-
-  ; output
-  if ( store_nc ) then
-    foutname = "anom_" + varname + "_" + sy + "_" + ey + ".nc"
-    system("rm " + foutname)
-    anout =  addfile(foutname, "c")
-    output_varname = "mon_ano_" + varname
-    anout->$output_varname$ = anom
-  end if
 end
