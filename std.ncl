@@ -27,7 +27,7 @@ begin
   res@cnLinesOn = False
 
   ppname(plotname,type)
-  res = cfsdiag_set_cn_limits(res, varname, diag)
+  res = cfsdiag_set_cn_limits(res, varname, "std")
   res = set_res_centered_pacific(res)   ; make pacific center.
 
   plot = gsn_csm_contour_map(wks, var_std, res)
