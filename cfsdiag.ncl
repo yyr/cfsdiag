@@ -112,6 +112,29 @@ begin
   return
 end
 
+;_____________________________________________________________________________
+; procedure: seamask
+; Doc:
+;_____________________________________________________________________________
+undef("seamask")
+procedure seamask(var:numeric)
+local lm
+
+begin
+    lm = load_landmask()
+    if ( rank_of(var) .eq. 2 ) then
+      var(:,:) = where(lm.eq.1, lm@_FillValue,var(:,:))
+      else if ( rank_of(var) .eq. 3 ) then
+        do it = 0, dim_len0(var) - 1, 1    ; doc
+          var(it,:,:) = where(lm.eq.0, lm@_FillValue,var(it,:,:))
+        end do
+      end if
+    end if
+    var@_FillValue = lm@_FillValue
+  return
+end
+
+;_____________________________________________________________________________
 ; Function: load_data
 ; Doc:
 ;_____________________________________________________________________________
