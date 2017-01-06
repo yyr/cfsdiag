@@ -8,7 +8,6 @@ load "./cfsdiag.ncl"
 begin
   type = "pdf"
   diag = "std_mon_anom"
-  masking = False
 
   plotname = diag + "_" + varname
   wks = gsn_open_wks(type,plotname)
@@ -25,14 +24,6 @@ begin
   anom = std1mon - std2mon
   printMinMax(anom,True)
   copy_VarCoords(std1mon,anom)
-
-  if ( varname .eq. "ts" ) then
-    masking = True
-  end if
-
-  if ( masking ) then
-    landmask(anom)
-  end if
 
   res = True
   res = set_res_cn(res)

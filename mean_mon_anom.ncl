@@ -8,7 +8,6 @@ load "./cfsdiag.ncl"
 begin
   type = "pdf"
   diag = "mean_mon_anom"
-  masking = False
 
   expmt1 = "ref"
   expmt2 = "ftpc"
@@ -25,14 +24,6 @@ begin
   anom = clim1 - clim2
   printMinMax(anom,True)
   copy_VarCoords(clim1,anom)
-
-  if ( varname .eq. "ts" ) then
-    masking = True
-  end if
-
-  if ( masking ) then
-    landmask(anom)
-  end if
 
   res = True
   res = set_res_cn(res)
