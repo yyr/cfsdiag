@@ -10,6 +10,9 @@ begin
   type = "pdf"
   varname = "prate"
 
+  plotname =  "anual_cycle" + "_" + varname + "_" + reg
+  wks = gsn_open_wks(type,plotname)
+
   var_obs  = load_data("obs", varname)
   var_ref  = load_data("ref", varname)
   var_ftpc = load_data("ftpc", varname)
@@ -44,18 +47,17 @@ begin
   ; ftc_ir_ave = ftc_ir_sum/num(ind(ndtooned(ftc_ir).ne.0))
 
   res = True
-  res = set_res_no_frame(res)
-  res@gsnLeftString = "IR" + "_" + varname
+  res@gsnLeftString = "ir" + "_" + varname
   res@xyLineColors      = (/"black", "blue", "red"/)          ; change line color
-
-  res = set_res_legend(res)
   res@xyExplicitLegendLabels = (/" obs", " ref"," ftpc" /)         ; create explicit labels
 
-  plotname =  "anual_cycle" + "_" + varname + "_" + reg
-  ppname(plotname,type)
-  wks = gsn_open_wks(type,plotname)
+  res = set_res_no_frame(res)
+  res = set_res_tix_limits(res, 1, 12)
+  res = set_res_legend(res)
 
+  ppname(plotname,type)
   plot = gsn_csm_xy(wks, ispan(1,12,1), \
                     (/obs_ir_ave, ref_ir_ave, ftc_ir_ave/), res)
+
   maximize_output(wks,True)
 end

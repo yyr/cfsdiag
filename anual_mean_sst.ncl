@@ -60,33 +60,33 @@ begin
     E = E + 360.
   end if
 
-  obs_ir = obs_mean({month| :}, {lat | N:S}, {lon | W:E})
-  ref_ir = ref_mean({month| :}, {lat | N:S}, {lon | W:E})
-  ftc_ir = ftc_mean({month| :}, {lat | N:S}, {lon | W:E})
+  obs_reg = obs_mean({month| :}, {lat | N:S}, {lon | W:E})
+  ref_reg = ref_mean({month| :}, {lat | N:S}, {lon | W:E})
+  ftc_reg = ftc_mean({month| :}, {lat | N:S}, {lon | W:E})
 
-  obs_ir_ave = dim_avg_n_Wrap(obs_ir,(/1,2/))
-  ref_ir_ave = dim_avg_n_Wrap(ref_ir,(/1,2/))
-  ftc_ir_ave = dim_avg_n_Wrap(ftc_ir,(/1,2/))
+  obs_reg_ave = dim_avg_n_Wrap(obs_reg,(/1,2/))
+  ref_reg_ave = dim_avg_n_Wrap(ref_reg,(/1,2/))
+  ftc_reg_ave = dim_avg_n_Wrap(ftc_reg,(/1,2/))
 
-  ; printMinMax(obs_ir_ave, True)
-  ; printMinMax(ref_ir_ave, True)
-  ; printMinMax(ftc_ir_ave, True)
+  ; printMinMax(obs_reg_ave, True)
+  ; printMinMax(ref_reg_ave, True)
+  ; printMinMax(ftc_reg_ave, True)
 
-  obs_ir_ave = obs_ir_ave - 273.15
-  ref_ir_ave = ref_ir_ave - 273.15
-  ftc_ir_ave = ftc_ir_ave - 273.15
+  obs_reg_ave = obs_reg_ave - 273.15
+  ref_reg_ave = ref_reg_ave - 273.15
+  ftc_reg_ave = ftc_reg_ave - 273.15
 
   res = True
-  res = set_res_no_frame(res)
   res@gsnLeftString = reg + " SST (C)"
   res@xyLineColors      = (/"black", "blue", "red"/)          ; change line color
-
-  res = set_res_legend(res)
   res@xyExplicitLegendLabels = (/" obs", " ref"," ftpc" /)         ; create explicit labels
 
-  ppname(plotname,type)
+  res = set_res_no_frame(res)
+  res = set_res_tix_limits(res, 1, 12)
+  res = set_res_legend(res)
 
+  ppname(plotname,type)
   plot = gsn_csm_xy(wks, ispan(1,12,1), \
-                    (/obs_ir_ave, ref_ir_ave, ftc_ir_ave/), res)
+                    (/obs_reg_ave, ref_reg_ave, ftc_reg_ave/), res)
   maximize_output(wks,True)
 end

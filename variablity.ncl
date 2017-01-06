@@ -10,6 +10,9 @@ begin
   type = "pdf"
   varname = "prate"
 
+  plotname =  "variablity" + "_" + varname + "_" + reg
+  wks = gsn_open_wks(type,plotname)
+
   var_obs  = load_data("obs", varname)
   var_ref  = load_data("ref", varname)
   var_ftpc = load_data("ftpc", varname)
@@ -35,18 +38,16 @@ begin
   ftc_ir_ave = dim_avg_n_Wrap(ftc_ir,(/1,2/))
 
   res = True
-  res = set_res_no_frame(res)
   res@gsnLeftString = "IR" + " (mm/day)"
   res@xyLineColors      = (/"black", "blue", "red"/)          ; change line color
-
-  res = set_res_legend(res)
   res@xyExplicitLegendLabels = (/" obs", " ref"," ftpc" /)         ; create explicit labels
 
-  plotname =  "variablity" + "_" + varname + "_" + reg
-  ppname(plotname,type)
-  wks = gsn_open_wks(type,plotname)
+  res = set_res_no_frame(res)
+  res = set_res_tix_limits(res, 1, 12)
+  res = set_res_legend(res)
 
-  plot = gsn_csm_xy(wks, ispan(1,12,1), \
+  ppname(plotname,type)
+  plot = gsn_csm_xy(wks, ispan(0,11,1), \
                     (/obs_ir_ave, ref_ir_ave, ftc_ir_ave/), res)
   maximize_output(wks,True)
 end

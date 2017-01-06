@@ -56,15 +56,16 @@ begin
   ftc_reg_ave = dim_avg_n_Wrap(ftc_reg,(/1,2/))
 
   res = True
-  res = set_res_no_frame(res)
   res@gsnLeftString = reg + " SST (C)"
   res@xyLineColors      = (/"black", "blue", "red"/)          ; change line color
-
-  res = set_res_legend(res)
   res@xyExplicitLegendLabels = (/" obs", " ref"," ftpc" /)         ; create explicit labels
 
+  res = set_res_no_frame(res)
+  res = set_res_tix_limits(res, 1, 12)
+  res = set_res_legend(res)
+
   ppname(plotname,type)
-  plot = gsn_csm_xy(wks, ispan(1,12,1), \
+  plot = gsn_csm_xy(wks, ispan(0,11,1), \
                     (/obs_reg_ave, ref_reg_ave, ftc_reg_ave/), res)
   maximize_output(wks,True)
 end
