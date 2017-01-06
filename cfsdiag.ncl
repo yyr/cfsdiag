@@ -149,6 +149,10 @@ begin
     var = var + C2T
   end if
 
+  if ( varname .eq. "ts" .and. expmt .ne. "obs" ) then
+    landmask(var)
+  end if
+
   return(var)
 end
 
