@@ -9,9 +9,13 @@
 
 # ./nclrunner.py -varname "prate ts"                         mean_anom.ncl
 # ./nclrunner.py -varname "prate ts"                         mean_mon_anom.ncl
+# ./nclrunner.py -varname "prate ts" -expmt1 "obs" -expmt2 "ref" mean_anom.ncl
+# ./nclrunner.py -varname "prate ts" -expmt1 "obs" -expmt2 "ref" mean_mon_anom.ncl
 
 # ./nclrunner.py -varname "prate ts"                         std_anom.ncl
 # ./nclrunner.py -varname "prate ts"                         std_mon_anom.ncl
+# ./nclrunner.py -varname "prate ts" -expmt1 "obs" -expmt2 "ref" std_anom.ncl
+# ./nclrunner.py -varname "prate ts" -expmt1 "obs" -expmt2 "ref" std_mon_anom.ncl
 
 # ./nclrunner.py -varname "prate ts"  mean_ts.ncl
 

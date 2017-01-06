@@ -9,8 +9,12 @@ begin
   type = "pdf"
   diag = "std_anom"
 
-  expmt1 = "ref"
-  expmt2 = "ftpc"
+  if ( .not. isdefined("expmt1") ) then
+    expmt1 = "ref"
+  end if
+  if ( .not. isdefined("expmt2") ) then
+    expmt2 = "ftpc"
+  end if
 
   plotname = diag + "_" + varname
   wks = gsn_open_wks(type,plotname)

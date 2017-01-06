@@ -12,8 +12,12 @@ begin
   plotname = diag + "_" + varname
   wks = gsn_open_wks(type,plotname)
 
-  expmt1 = "ref"
-  expmt2 = "ftpc"
+  if ( .not. isdefined("expmt1") ) then
+    expmt1 = "ref"
+  end if
+  if ( .not. isdefined("expmt2") ) then
+    expmt2 = "ftpc"
+  end if
 
   var1 = load_data(expmt1, varname)
   var2 = load_data(expmt2, varname)
