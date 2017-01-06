@@ -76,6 +76,42 @@ end
 
 
 ;_____________________________________________________________________________
+; Function: load_landmask
+; Doc:
+;_____________________________________________________________________________
+undef("load_landmask")
+function load_landmask()
+local f, dir, finname
+
+begin
+  dir = "~/git/cfsdiag/cfs/obs/"
+  finname = "cfs2_global_slmask.cfsgrid.nc"
+  f = addfile(dir + finname, "r")
+  return(f->LAND_GDS4_SFC_51)
+end
+
+;_____________________________________________________________________________
+; procedure: landmask
+; Doc:
+;_____________________________________________________________________________
+undef("landmask")
+procedure landmask(var:numeric)
+local lm
+
+begin
+    lm = load_landmask()
+    if ( rank_of(var) .eq. 2 ) then
+      var(:,:) = where(lm.eq.1, lm@_FillValue,var(:,:))
+      else if ( rank_of(var) .eq. 3 ) then
+        do it = 0, dim_len0(var) - 1, 1    ; doc
+          var(it,:,:) = where(lm.eq.1, lm@_FillValue,var(it,:,:))
+        end do
+      end if
+    end if
+    var@_FillValue = lm@_FillValue
+  return
+end
+
 ; Function: load_data
 ; Doc:
 ;_____________________________________________________________________________
@@ -139,43 +175,6 @@ begin
   return(cd_calendar(time,0))
 end
 
-
-;_____________________________________________________________________________
-; Function: load_landmask
-; Doc:
-;_____________________________________________________________________________
-undef("load_landmask")
-function load_landmask()
-local f, dir, finname
-
-begin
-  dir = "~/git/cfsdiag/cfs/obs/"
-  finname = "cfs2_global_slmask.cfsgrid.nc"
-  f = addfile(dir + finname, "r")
-  return(f->LAND_GDS4_SFC_51)
-end
-
-;_____________________________________________________________________________
-; procedure: landmask
-; Doc:
-;_____________________________________________________________________________
-undef("landmask")
-procedure landmask(var:numeric)
-local lm
-
-begin
-    lm = load_landmask()
-    if ( rank_of(var) .eq. 2 ) then
-      var(:,:) = where(lm.eq.1, lm@_FillValue,var(:,:))
-      else if ( rank_of(var) .eq. 3 ) then
-        do it = 0, dim_len0(var) - 1, 1    ; doc
-          var(it,:,:) = where(lm.eq.1, lm@_FillValue,var(it,:,:))
-        end do
-      end if
-    end if
-    var@_FillValue = lm@_FillValue
-  return
-end
 
 ;_____________________________________________________________________________
 ; Function: cfsdiag_set_cn_limits
