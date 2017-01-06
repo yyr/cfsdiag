@@ -45,6 +45,9 @@ begin
   res = set_res_no_frame(res)
   res = set_res_tix_limits(res, 1, 12)
   res = set_res_legend(res)
+  res = set_res_aspectratio_manual(res, 0.4, 0.6)
+  res = set_res_tm_explicit(res, (/1,3,5,7,9,11/), \
+                            (/"J", "M", "M", "J", "S", "N"/), ispan(1,12,1))
 
   ppname(plotname,type)
   plot = gsn_csm_xy(wks, ispan(1,12,1), \
