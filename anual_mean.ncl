@@ -21,9 +21,9 @@ begin
   ref_mean = clmMonTLL(var_ref)
   ftc_mean = clmMonTLL(var_ftpc)
 
-  landmask(obs_mean)
-  landmask(ref_mean)
-  landmask(ftc_mean)
+  seamask(obs_mean)
+  seamask(ref_mean)
+  seamask(ftc_mean)
 
   obs_ir = obs_mean({month| :}, {lat | IR_N: IR_S},{lon | IR_W:IR_E})
   ref_ir = ref_mean({month| :}, {lat | IR_N: IR_S},{lon | IR_W:IR_E})

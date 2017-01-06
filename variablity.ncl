@@ -21,9 +21,9 @@ begin
   ref_std = stdMonTLL(var_ref)
   ftc_std = stdMonTLL(var_ftpc)
 
-  landmask(obs_std)
-  landmask(ref_std)
-  landmask(ftc_std)
+  seamask(obs_std)
+  seamask(ref_std)
+  seamask(ftc_std)
 
   ; printVarSummary(obs_std)
   ; printVarSummary(ref_std)
