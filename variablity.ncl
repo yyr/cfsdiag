@@ -47,7 +47,7 @@ begin
   res = set_res_legend(res)
 
   ppname(plotname,type)
-  plot = gsn_csm_xy(wks, ispan(0,11,1), \
+  plot = gsn_csm_xy(wks, ispan(1,12,1), \
                     (/obs_ir_ave, ref_ir_ave, ftc_ir_ave/), res)
   maximize_output(wks,True)
 end
