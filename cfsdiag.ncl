@@ -3,6 +3,7 @@
 
 load "./config.ncl"
 load "$nsc/generic.ncl"
+load "$nsc/resources.ncl"
 
 ;_____________________________________________________________________________
 ; Function: time_indices
@@ -254,4 +255,21 @@ begin
     end if
   end if
   return
+end
+
+
+;_____________________________________________________________________________
+; Function: cfsdiag_set_res_cn_map
+; Doc:
+;_____________________________________________________________________________
+undef("cfsdiag_set_res_cn_map")
+function cfsdiag_set_res_cn_map(res)
+local res
+
+begin
+  res = set_res_no_margin(res)
+  res = set_res_cn(res)
+  res = set_res_highres_coast(res)
+  res = set_res_centered_pacific(res)   ; make pacific center.
+  return(res)
 end
