@@ -1,8 +1,6 @@
 ; Copyright (C) Yagnesh Raghava Yakkala. http://yagnesh.org
 ; Created: Monday, September 26 2016
 
-load "$nsc/is.ncl"
-load "$nsc/resources.ncl"
 load "./cfsdiag.ncl"
 
 begin
@@ -18,6 +16,7 @@ begin
 
   plotname = diag + "_" + varname
   wks = gsn_open_wks(type,plotname)
+  gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
 
   var1 = load_data(expmt1, varname)
   var2 = load_data(expmt2, varname)
@@ -32,16 +31,11 @@ begin
   printMinMax(anom,True)
   copy_VarCoords(std1,anom)
 
-  res = True
-  res = set_res_cn(res)
+  res = cfsdiag_set_res_cn_map(True)
+  res = cfsdiag_set_cn_limits(res, varname, "anom")
   res@gsnLeftString = diag + "_" + varname
-  res@cnLinesOn = False
 
   ppname(plotname,type)
-  res = cfsdiag_set_cn_limits(res, varname, "anom")
-  gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
-  res = set_res_centered_pacific(res)   ; make pacific center.
-
   plot = gsn_csm_contour_map(wks, anom, res)
 end
 

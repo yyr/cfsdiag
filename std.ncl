@@ -10,7 +10,7 @@ begin
   diag = "std"
 
   plotname = diag + "_" + expmt + "_" + varname
-  dir = "~/git/cfsdiag/cfs/cfs2_" + expmt + "/orig/"
+  wks = gsn_open_wks(type,plotname)
 
   var = load_data(expmt, varname)
 
@@ -19,16 +19,10 @@ begin
 
   printMinMax(var_std,True)
 
-  wks = gsn_open_wks(type,plotname)
-
-  res = True
+  res = cfsdiag_set_res_cn_map(True)
+  res = cfsdiag_set_cn_limits(res, varname, "std")
   res@gsnLeftString = diag + "_"  + expmt + "_" + varname
-  res = set_res_cn(res)
-  res@cnLinesOn = False
 
   ppname(plotname,type)
-  res = cfsdiag_set_cn_limits(res, varname, "std")
-  res = set_res_centered_pacific(res)   ; make pacific center.
-
   plot = gsn_csm_contour_map(wks, var_std, res)
 end

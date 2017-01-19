@@ -17,15 +17,11 @@ begin
   var_std_mon = stdMonTLL(var)
   printMinMax(var_std_mon,True)
 
-  res = True
-  res = set_res_cn(res)
+  res = cfsdiag_set_res_cn_map(True)
+  res = cfsdiag_set_cn_limits(res, varname, "std")
   res@gsnLeftString = diag + "_"  + expmt + "_" + varname
-  res@cnLinesOn = False
 
   ppname(plotname,type)
-  res = cfsdiag_set_cn_limits(res, varname, "std")
-  res = set_res_centered_pacific(res)   ; make pacific center.
-
   do it = 0, 11, 1
     res@gsnCenterString = month_name(it)
     plot = gsn_csm_contour_map(wks, var_std_mon(it,:,:), res)
