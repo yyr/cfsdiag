@@ -8,10 +8,10 @@ begin
   diag = "std_anom"
 
   if ( .not. isdefined("expmt1") ) then
-    expmt1 = "ref"
+    expmt1 = "ftpc"
   end if
   if ( .not. isdefined("expmt2") ) then
-    expmt2 = "ftpc"
+    expmt2 = "ref"
   end if
 
   plotname = diag + "_" + varname
@@ -33,7 +33,7 @@ begin
 
   res = cfsdiag_set_res_cn_map(True)
   res = cfsdiag_set_cn_limits(res, varname, "anom")
-  res@gsnLeftString = diag + "_" + varname
+  res@gsnLeftString = expmt1 + "-" + expmt2 + " " + varname
 
   ppname(plotname,type)
   plot = gsn_csm_contour_map(wks, anom, res)
