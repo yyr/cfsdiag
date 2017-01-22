@@ -41,6 +41,7 @@ begin
   res@gsnLeftString = "IR" + " (mm/day)"
   res@xyLineColors      = (/"black", "blue", "red"/)          ; change line color
   res@xyExplicitLegendLabels = (/" obs", " ref"," ftpc" /)         ; create explicit labels
+  res = set_res_xy(res)
 
   res = set_res_no_frame(res)
   res = set_res_tix_limits(res, 1, 12)
