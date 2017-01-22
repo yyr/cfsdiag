@@ -270,6 +270,7 @@ begin
   res = set_res_no_margin(res)
   res = set_res_cn(res)
   res = set_res_highres_coast(res)
+  res = set_res_mp_lat_limits(res, -40., 40.)
   res = set_res_centered_pacific(res)   ; make pacific center.
   return(res)
 end
