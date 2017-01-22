@@ -34,20 +34,24 @@ def parse():
 
 
 def prepare_command(opts, scr):
-    keys, value_list = zip(*opts)
     cmds = []
+    if len(opts) == 0:
+        cmds.append('ncl -Q {scr}'.format(scr=scr))
+        return cmds
+
+    keys, value_list = zip(*opts)
     for item in product(*value_list):
         # FIXME: ncl may get choked if numbers are passed as strings
         v_list = [
             '\'{}="{}"\''.format(key[1:], val) for key, val in zip(keys, item)
         ]
-        cmds.append('ncl {} {scr}'.format(' '.join(v_list), scr=scr))
+        cmds.append('ncl -Q {} {scr}'.format(' '.join(v_list), scr=scr))
 
     return cmds
 
 
 def run_command(coms):
-    print("Running: {}\n".format(com))
+    print("\nRunning: {}\n".format(com))
     import subprocess
     subprocess.call(com, shell=True)
 
