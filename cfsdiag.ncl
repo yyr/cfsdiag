@@ -16,10 +16,10 @@ local expmt, varname, st, et
 begin
   if ( expmt .eq. "ref" ) then
     st = 66
-    et = 197
+    et = 521
   else
     st = 0
-    et = 131
+    et = 455
   end if
 
   if ( expmt .eq. "obs" .and. varname .eq. "prate"  ) then
@@ -44,7 +44,7 @@ local dir, finname, fbit, expmt, varname
 
 begin
   sy = 2020
-  ey = 2030
+  ey = 2057
 
   if ( expmt .eq. "obs" ) then
     dir = "~/git/cfsdiag/cfs/" + expmt + "/"
@@ -55,7 +55,7 @@ begin
   if ( expmt .eq. "ref" ) then
     fbit = "_1m_2014_2064_"
   else
-    fbit = "_1m_2020_2030_"
+    fbit = "_1m_2020_2057_"
   end if
 
   if ( expmt .eq. "obs" ) then
