@@ -21,21 +21,20 @@ begin
   clim1 = dim_avg_n_Wrap(var1,(/1,2/))
   clim2 = dim_avg_n_Wrap(var2,(/1,2/))
 
-  mr = month_to_annual(clim1,0) ; yearly mean.
-  mn = month_to_annual(clim2,0)
+  mr = month_to_annual(clim1,1) ; yearly mean.
+  mn = month_to_annual(clim2,1)
 
   utc = get_time(expmt1)
 
   res = True
-  res = set_res_no_frame(res)
-  res@gsnLeftString = diag + "_" + varname
+  res = set_res_xy(res)
+  res = set_res_legend(res)
+  res = set_res_aspectratio_manual(res, 0.6, 0.4)
+  res@gsnLeftString = "yearly mean" + " (" + varname + ")"
   res@xyLineColors      = (/"red", "blue"/)          ; change line color
 
-  res = set_res_legend(res)
   res@xyExplicitLegendLabels = (/" ref"," ftpc"/)         ; create explicit labels
 
   ppname(plotname,type)
-
   plot = gsn_csm_xy(wks, utc(::12,0), (/mr,mn/), res)
-  maximize_output(wks,True)
 end
