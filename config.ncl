@@ -28,8 +28,8 @@ SLP@CNINT = 1.
 STD = True
 STD@COLORMAP = "WhBlGrYeRe"
 STD@CNMIN = 0
-STD@CNMAX = 4
-STD@CNINT = .2
+STD@CNMAX = 1
+STD@CNINT = .02
 
 ; anomaly
 ANOM_TSFC = True
