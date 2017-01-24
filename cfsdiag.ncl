@@ -49,7 +49,7 @@ begin
   if ( expmt .eq. "obs" ) then
     dir = "~/git/cfsdiag/cfs/" + expmt + "/"
   else
-    dir = "~/git/cfsdiag/cfs/cfs2_" + expmt + "/orig/"
+    dir = "~/git/cfsdiag/cfs/cfs2_" + expmt + "/"
   end if
 
   if ( expmt .eq. "ref" ) then
