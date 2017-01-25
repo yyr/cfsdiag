@@ -37,7 +37,7 @@ begin
   ref_ir_ave = dim_avg_n_Wrap(ref_ir,(/1,2/))
   ftc_ir_ave = dim_avg_n_Wrap(ftc_ir,(/1,2/))
 
-  res = True
+  res = cfsdiag_set_res_placeholder(True)
   res@gsnLeftString = "IR" + " (mm/day)"
   res@xyLineColors      = (/"black", "blue", "red"/)          ; change line color
   res@xyExplicitLegendLabels = (/" obs", " ref"," ftpc" /)         ; create explicit labels

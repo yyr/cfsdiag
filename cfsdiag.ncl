@@ -205,6 +205,20 @@ end
 
 
 ;_____________________________________________________________________________
+; Function: cfsdiag_set_res_placeholder
+; Doc:
+;_____________________________________________________________________________
+undef("cfsdiag_set_res_placeholder")
+function cfsdiag_set_res_placeholder(res)
+local res
+
+begin
+  res@gsnStringFontHeightF = 14
+  return(res)
+end
+
+
+;_____________________________________________________________________________
 ; Function: cfsdiag_set_cn_limits
 ; Doc:
 ;_____________________________________________________________________________

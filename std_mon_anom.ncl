@@ -28,7 +28,8 @@ begin
   printMinMax(anom,True)
   copy_VarCoords(std1mon,anom)
 
-  res = cfsdiag_set_res_cn_map(True)
+  res = cfsdiag_set_res_placeholder(True)
+  res = cfsdiag_set_res_cn_map(res)
   res = cfsdiag_set_cn_limits(res, varname, "anom")
   res@gsnLeftString = diag + "_" + varname
 

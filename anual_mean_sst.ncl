@@ -76,7 +76,7 @@ begin
   ref_reg_ave = ref_reg_ave - 273.15
   ftc_reg_ave = ftc_reg_ave - 273.15
 
-  res = True
+  res = cfsdiag_set_res_placeholder(True)
   res@gsnLeftString = reg + " SST (C)"
   res@xyLineColors      = (/"black", "blue", "red"/)          ; change line color
   res@xyExplicitLegendLabels = (/" obs", " ref"," ftpc" /)         ; create explicit labels

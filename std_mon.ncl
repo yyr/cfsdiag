@@ -17,7 +17,8 @@ begin
   var_std_mon = stdMonTLL(var)
   printMinMax(var_std_mon,True)
 
-  res = cfsdiag_set_res_cn_map(True)
+  res = cfsdiag_set_res_placeholder(True)
+  res = cfsdiag_set_res_cn_map(res)
   res = cfsdiag_set_cn_limits(res, varname, "std")
   res@gsnLeftString = diag + "_"  + expmt + "_" + varname
 

@@ -15,7 +15,8 @@ begin
   var_mean = clmMonTLL(var)
 ;  printMinMax(var,True)
 
-  res = cfsdiag_set_res_cn_map(True)
+  res = cfsdiag_set_res_placeholder(True)
+  res = cfsdiag_set_res_cn_map(res)
   res = cfsdiag_set_cn_limits(res, varname, "mean")
   res@gsnLeftString = diag + "_"  + expmt + "_" + varname
 

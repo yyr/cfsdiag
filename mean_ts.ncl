@@ -26,7 +26,7 @@ begin
 
   utc = get_time(expmt1)
 
-  res = True
+  res = cfsdiag_set_res_placeholder(True)
   res = set_res_xy(res)
   res = set_res_legend(res)
   res = set_res_aspectratio_manual(res, 0.6, 0.4)

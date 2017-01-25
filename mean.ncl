@@ -18,7 +18,8 @@ begin
   var_mean = dim_avg_n_Wrap(var,0)
   printMinMax(var_mean,True)
 
-  res = cfsdiag_set_res_cn_map(True)
+  res = cfsdiag_set_res_placeholder(True)
+  res = cfsdiag_set_res_cn_map(res)
   res = cfsdiag_set_cn_limits(res, varname, diag)
   res@gsnLeftString = diag + "_"  + expmt + "_" + varname
 

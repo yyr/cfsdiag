@@ -46,7 +46,7 @@ begin
   ; ref_ir_ave = ref_ir_sum/num(ind(ndtooned(ref_ir).ne.0))
   ; ftc_ir_ave = ftc_ir_sum/num(ind(ndtooned(ftc_ir).ne.0))
 
-  res = True
+  res = cfsdiag_set_res_placeholder(True)
   res@gsnLeftString = "ir" + "_" + varname
   res@xyLineColors      = (/"black", "blue", "red"/)          ; change line color
   res@xyExplicitLegendLabels = (/" obs", " ref"," ftpc" /)         ; create explicit labels
