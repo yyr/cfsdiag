@@ -42,6 +42,11 @@ begin
     E = eIOD_E
   end if
 
+  if ( reg .eq. "nino" ) then
+    W = W + 360.
+    E = E + 360.
+  end if
+
   var_obs  = load_data("obs", varname)
   var_ref  = load_data("ref", varname)
   var_ftpc = load_data("ftpc", varname)
@@ -53,12 +58,6 @@ begin
   ; printVarSummary(obs_mean)
   ; printVarSummary(ref_mean)
   ; printVarSummary(ftc_mean)
-
-
-  if ( reg .eq. "nino" ) then
-    W = W + 360.
-    E = E + 360.
-  end if
 
   obs_reg = obs_mean({month| :}, {lat | N:S}, {lon | W:E})
   ref_reg = ref_mean({month| :}, {lat | N:S}, {lon | W:E})
