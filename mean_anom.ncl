@@ -16,7 +16,7 @@ begin
     expmt2 = "ref"
   end if
 
-  plotname = diag + "_" + varname
+  plotname = diag + "_" + varname + "_" + expmt1 + "-" + expmt2
   wks = gsn_open_wks(type,plotname)
   gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
 
