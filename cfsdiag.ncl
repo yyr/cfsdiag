@@ -26,7 +26,7 @@ begin
     st = 0
     et = 431
     else if ( expmt .eq. "obs" .and. varname .eq. "ts"  ) then
-      st = 0
+      st = 1308
       et = 1751
     end if
   end if
