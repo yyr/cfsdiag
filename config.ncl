@@ -15,7 +15,7 @@ PRATE = True
 PRATE@COLORMAP = "WhBlGrYeRe"
 PRATE@UNITMULT = 86400.         ; converts mm/day
 PRATE@CNMIN = 0
-PRATE@CNMAX = 20.
+PRATE@CNMAX = 10.
 PRATE@CNINT = 0.5
 
 SLP = True
