@@ -237,7 +237,12 @@ begin
   end if
 
   if ( diag .eq. "std" ) then
-    set_res_cn_limits(res_in, STD@CNMIN, STD@CNMAX, STD@CNINT)
+    if ( varname .eq. "prate" ) then
+      set_res_cn_limits(res_in, STD_PRATE@CNMIN, STD_PRATE@CNMAX, STD_PRATE@CNINT)
+      else if ( varname .eq. "ts" .or. varname .eq. "tsfc" ) then
+        set_res_cn_limits(res_in, STD_TS@CNMIN, STD_TS@CNMAX, STD_TS@CNINT)
+      end if
+    end if
   end if
 
   if ( diag .eq. "anom" ) then
