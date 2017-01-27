@@ -17,10 +17,10 @@
 # ./nclrunner.py -varname "prate ts" -expmt1 "ref" -expmt2 "obs" std_anom.ncl
 # ./nclrunner.py -varname "prate ts" -expmt1 "ref" -expmt2 "obs" std_mon_anom.ncl
 
-# ./nclrunner.py -varname "prate ts"  mean_ts.ncl
+# ./nclrunner.py -varname "prate ts"  -reg "global nino wiod eiod" mean_ts.ncl
 
-# ncl anual_mean.ncl
-# ncl variablity.ncl
+# ./nclrunner.py anual_mean.ncl
+# ./nclrunner.py variablity.ncl
 
 # ./nclrunner.py -reg "nino wiod eiod"  anual_mean_sst.ncl
 # ./nclrunner.py -reg "nino wiod eiod"  variablity_sst.ncl
