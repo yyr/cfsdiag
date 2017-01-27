@@ -9,8 +9,8 @@ convert mean_ftpc_ts.pdf          -undercolor '#00000080' -gravity NorthWest -po
 convert std_ftpc_ts.pdf           -undercolor '#00000080' -gravity NorthWest -pointsize 20 -annotate +0+0 '(f)' std_ftpc_ts.png
 convert mean_anom_ts_ref-obs.pdf -undercolor '#00000080' -gravity NorthWest -pointsize 20 -annotate +0+0 '(g)' mean_anom_ts_ref-obs.png
 convert std_anom_ts_ref-obs.pdf  -undercolor '#00000080' -gravity NorthWest -pointsize 20 -annotate +0+0 '(h)' std_anom_ts_ref-obs.png
-convert mean_anom_ts.pdf         -undercolor '#00000080' -gravity NorthWest -pointsize 20 -annotate +0+0 '(i)' mean_anom_ts.png
-convert std_anom_ts.pdf          -undercolor '#00000080' -gravity NorthWest -pointsize 20 -annotate +0+0 '(j)' std_anom_ts.png
+convert mean_anom_ts_ref-obs.pdf -undercolor '#00000080' -gravity NorthWest -pointsize 20 -annotate +0+0 '(i)' mean_anom_ts_ref-obs.png
+convert std_anom_ts_ref-obs.pdf  -undercolor '#00000080' -gravity NorthWest -pointsize 20 -annotate +0+0 '(j)' std_anom_ts_ref-obs.png
 
 
 montage mean_obs_ts.png          \
@@ -21,7 +21,7 @@ montage mean_obs_ts.png          \
         std_ftpc_ts.png          \
         mean_anom_ts_ref-obs.png \
         std_anom_ts_ref-obs.png  \
-        mean_anom_ts.png         \
-        std_anom_ts.png          \
-        -tile 2x4 -geometry +0+0 \
+        mean_anom_ts_ref-obs.png \
+        std_anom_ts_ref-obs.png  \
+        -tile 2x5 -geometry +0+0 \
         sst_dist_expmts.png
