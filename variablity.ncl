@@ -33,6 +33,14 @@ begin
   ref_ir = ref_std({month| :}, {lat | IR_N: IR_S},{lon | IR_W:IR_E})
   ftc_ir = ftc_std({month| :}, {lat | IR_N: IR_S},{lon | IR_W:IR_E})
 
+  ; Plot horizontally before doing area average (just to verify).
+  ; ppname(plotname,type)
+  ; res =   set_res_cn(True)
+  ; set_res_cn_limits(res, 0 , 7, 0.2)
+  ; plot = gsn_csm_contour(wks, obs_ir(4,:,:), res)
+  ; plot = gsn_csm_contour(wks, ftc_ir(4,:,:), res)
+  ; plot = gsn_csm_contour(wks, ref_ir(4,:,:), res)
+
   obs_ir_ave = dim_avg_n_Wrap(obs_ir,(/1,2/))
   ref_ir_ave = dim_avg_n_Wrap(ref_ir,(/1,2/))
   ftc_ir_ave = dim_avg_n_Wrap(ftc_ir,(/1,2/))
