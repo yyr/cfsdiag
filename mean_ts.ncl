@@ -73,6 +73,23 @@ begin
   res = set_res_xy(res)
   res = set_res_legend(res)
   res = set_res_aspectratio_manual(res, 0.6, 0.4)
+
+  ; if ( varname .eq. "ts" ) then
+  ;   if ( reg .eq. "global" ) then
+  ;     res = set_res_tiy_limits(res, 284.5, 286.)
+  ;   else
+  ;     res = set_res_tiy_limits(res, 296., 305.)
+  ;   end if
+
+  ;   else if ( varname .eq. "prate" ) then
+  ;     if ( reg .eq. "global" ) then
+  ;       res = set_res_tiy_limits(res, 2.4, 2.8)
+  ;     else
+  ;       res = set_res_tiy_limits(res, 2., 3.)
+  ;     end if
+  ;   end if
+  ; end if
+
   res@gsnLeftString = "yearly mean of " + varname + " (" + reg + ")"
   res@xyLineColors      = (/"red", "blue"/)          ; change line color
 
