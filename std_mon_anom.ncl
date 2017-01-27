@@ -7,16 +7,16 @@ begin
   type = "pdf"
   diag = "std_mon_anom"
 
-  plotname = diag + "_" + varname + "_" + expmt1 + "-" + expmt2
-  wks = gsn_open_wks(type,plotname)
-  gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
-
   if ( .not. isdefined("expmt1") ) then
     expmt1 = "ref"
   end if
   if ( .not. isdefined("expmt2") ) then
     expmt2 = "ftpc"
   end if
+
+  plotname = diag + "_" + varname + "_" + expmt1 + "-" + expmt2
+  wks = gsn_open_wks(type,plotname)
+  gsn_define_colormap(wks,ANOM_TSFC@COLORMAP)
 
   var1 = load_data(expmt1, varname)
   var2 = load_data(expmt2, varname)
