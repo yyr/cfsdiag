@@ -1,4 +1,5 @@
-Ncl scripts to visualize CFSv2 Model output.
+Ncl scripts to visualize CFSv2 Model Output. For personal use, can be useful
+for others as well.
 
 Depends on ncl-lib_
 
