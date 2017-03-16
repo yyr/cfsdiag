@@ -293,3 +293,45 @@ begin
   res = set_res_centered_pacific(res)   ; make pacific center.
   return(res)
 end
+
+;_____________________________________________________________________________
+; procedure: nino_region_change
+; Doc:
+;_____________________________________________________________________________
+undef("nino_region_change")
+procedure nino_region_change(reg:string, N:float, E:float, W:float, S:float)
+local reg, N, E, W, S
+
+begin
+  if ( reg .eq. "ir" ) then
+    N = IR_N
+    E = IR_E
+    W = IR_W
+    S = IR_S
+  end if
+
+  if ( reg .eq. "nino" ) then
+    N = NINO_N
+    E = NINO_E
+    W = NINO_W
+    S = NINO_S
+
+    W = W + 360.
+    E = E + 360.
+  end if
+
+  if ( reg .eq. "wiod" ) then
+    N = wIOD_N
+    E = wIOD_E
+    W = wIOD_W
+    S = wIOD_S
+  end if
+
+  if ( reg .eq. "eiod" ) then
+    N = eIOD_N
+    E = eIOD_E
+    W = eIOD_W
+    S = eIOD_S
+  end if
+  return
+end
