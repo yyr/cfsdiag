@@ -13,26 +13,7 @@ begin
   plotname =  "variablity" + "_" + "sst" + "_" + reg
   wks = gsn_open_wks(type,plotname)
 
-  if ( reg .eq. "nino" ) then
-    S = NINO_S
-    N = NINO_N
-    W = NINO_W
-    E = NINO_E
-  end if
-
-  if ( reg .eq. "wiod" ) then
-    S = wIOD_S
-    N = wIOD_N
-    W = wIOD_W
-    E = wIOD_E
-  end if
-
-  if ( reg .eq. "eiod" ) then
-    S = eIOD_S
-    N = eIOD_N
-    W = eIOD_W
-    E = eIOD_E
-  end if
+  nino_region_change(reg, N, E, W, S)
 
   var_obs  = load_data("obs", varname)
   var_ref  = load_data("ref", varname)
@@ -42,10 +23,10 @@ begin
   ref_std = stdMonTLL(var_ref)
   ftc_std = stdMonTLL(var_ftpc)
 
-  if ( reg .eq. "nino" ) then
-    W = W + 360.
-    E = E + 360.
-  end if
+  ; if ( reg .eq. "nino" ) then
+  ;   W = W + 360.
+  ;   E = E + 360.
+  ; end if
 
   obs_reg = obs_std({month| :}, {lat | N:S}, {lon | W:E})
   ref_reg = ref_std({month| :}, {lat | N:S}, {lon | W:E})
